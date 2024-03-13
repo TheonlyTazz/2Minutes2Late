@@ -10,6 +10,7 @@ import java.util.Random;
 
 import entities.Crabby;
 import entities.EnemyManager;
+import entities.Entity;
 import entities.Player;
 import levels.LevelManager;
 import main.Game;
@@ -67,6 +68,7 @@ public class Playing extends State implements Statemethods {
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
+            checkDeathZone();
         } else
             pauseOverlay.update();
 
@@ -85,6 +87,18 @@ public class Playing extends State implements Statemethods {
             xLvlOffset = maxLvlOffsetX;
         else if (xLvlOffset < 0)
             xLvlOffset = 0;
+    }
+
+    private void checkDeathZone() {
+        float playerY = player.getHitbox().y + player.getHitbox().height + 1;
+
+        int height = Game.GAME_HEIGHT;
+
+        System.out.println(playerY + " " + height);
+
+        if (playerY >= height) {
+            setGameOver(true);
+        }
     }
 
     @Override
