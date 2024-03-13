@@ -71,7 +71,6 @@ public class Player extends Entity {
 
 	public void update() {
 		updateHealthBar();
-
 		if (currentHealth <= 0) {
 			playing.setGameOver(true);
 			return;
@@ -107,10 +106,10 @@ public class Player extends Entity {
 		healthWidth = (int) ((currentHealth / (float) maxHealth) * healthBarWidth);
 	}
 
-	public void render(Graphics g, int lvlOffset) {
-		g.drawImage(animations[playerAction][aniIndex], (int) (hitbox.x - xDrawOffset) - lvlOffset + flipX, (int) (hitbox.y - yDrawOffset), width * flipW, height, null);
-		drawHitbox(g, lvlOffset);
-//		drawAttackBox(g, lvlOffset);
+	public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
+		g.drawImage(animations[playerAction][aniIndex], (int) (hitbox.x - xDrawOffset) - xLvlOffset + flipX, (int) (hitbox.y - yDrawOffset) - yLvlOffset, width * flipW, height, null);
+		drawHitbox(g, xLvlOffset, yLvlOffset);
+//		drawAttackBox(g, xLvlOffset, yLvlOffset);
 		drawUI(g);
 	}
 

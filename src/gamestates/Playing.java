@@ -28,11 +28,17 @@ public class Playing extends State implements Statemethods {
     private boolean paused = false;
 
     private int xLvlOffset;
+    private int yLvlOffset;
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
+    private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
+    private int bottomBorder = (int) (0.8 * Game.GAME_HEIGHT);
     private int lvlTilesWide = LoadSave.GetLevelData()[0].length;
-    private int maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
-    private int maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE;
+    private int lvlTilesHeight = LoadSave.GetLevelData()[0].length;
+    private int maxXTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
+    private int maxYTilesOffset = lvlTilesHeight - Game.TILES_IN_HEIGHT;
+    private int maxLvlOffsetX = maxXTilesOffset * Game.TILES_SIZE;
+    private int maxLvlOffsetY = maxYTilesOffset * Game.TILES_SIZE;
 
     private BufferedImage backgroundImg, bigCloud, smallCloud;
     private int[] smallCloudsPos;
@@ -76,17 +82,29 @@ public class Playing extends State implements Statemethods {
 
     private void checkCloseToBorder() {
         int playerX = (int) player.getHitbox().x;
-        int diff = playerX - xLvlOffset;
+        int playerY = (int) player.getHitbox().y;
+        int xDiff = playerX - xLvlOffset;
+        int yDiff = playerY - yLvlOffset;
 
-        if (diff > rightBorder)
-            xLvlOffset += diff - rightBorder;
-        else if (diff < leftBorder)
-            xLvlOffset += diff - leftBorder;
+        if (xDiff > rightBorder)
+            xLvlOffset += xDiff - rightBorder;
+        else if (xDiff < leftBorder)
+            xLvlOffset += xDiff - leftBorder;
 
         if (xLvlOffset > maxLvlOffsetX)
             xLvlOffset = maxLvlOffsetX;
         else if (xLvlOffset < 0)
             xLvlOffset = 0;
+
+        if (yDiff > topBorder)
+            yLvlOffset += yDiff - topBorder;
+        else if (yDiff < bottomBorder)
+            yLvlOffset += yDiff - bottomBorder;
+
+        if(yLvlOffset > maxLvlOffsetY)
+            yLvlOffset = maxLvlOffsetY;
+        else if (yLvlOffset < 0)
+            yLvlOffset = 0;
     }
 
     private void checkDeathZone() {
@@ -107,9 +125,10 @@ public class Playing extends State implements Statemethods {
 
         drawClouds(g);
 
-        levelManager.draw(g, xLvlOffset);
-        player.render(g, xLvlOffset);
-        enemyManager.draw(g, xLvlOffset);
+        levelManager.draw(g, xLvlOffset, yLvlOffset);
+        player.render(g, xLvlOffset, yLvlOffset);
+
+        enemyManager.draw(g, xLvlOffset, yLvlOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));

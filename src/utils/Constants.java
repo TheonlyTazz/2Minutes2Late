@@ -2,8 +2,12 @@ package utils;
 
 import main.Game;
 
-public class Constants {
+import java.awt.*;
 
+public class Constants {
+	public static class ColorMapConstants {
+		public static final Color CRABBY = Color.decode("0xff00ff00");
+	}
 	public static class EnemyConstants {
 		public static final int CRABBY = 0;
 
