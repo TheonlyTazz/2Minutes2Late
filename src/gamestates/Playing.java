@@ -32,9 +32,9 @@ public class Playing extends State implements Statemethods {
     private int leftBorder = (int) (0.2 * Game.GAME_WIDTH);
     private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
     private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
-    private int bottomBorder = (int) (0.8 * Game.GAME_HEIGHT);
+    private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
     private int lvlTilesWide = LoadSave.GetLevelData()[0].length;
-    private int lvlTilesHeight = LoadSave.GetLevelData()[0].length;
+    private int lvlTilesHeight = LoadSave.GetLevelData().length;
     private int maxXTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
     private int maxYTilesOffset = lvlTilesHeight - Game.TILES_IN_HEIGHT;
     private int maxLvlOffsetX = maxXTilesOffset * Game.TILES_SIZE;
@@ -70,6 +70,7 @@ public class Playing extends State implements Statemethods {
     @Override
     public void update() {
         if (!paused && !gameOver) {
+
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
@@ -97,7 +98,7 @@ public class Playing extends State implements Statemethods {
             xLvlOffset = 0;
 
         if (yDiff > topBorder)
-            yLvlOffset += yDiff - topBorder;
+            yLvlOffset += yDiff + topBorder;
         else if (yDiff < bottomBorder)
             yLvlOffset += yDiff - bottomBorder;
 
@@ -110,9 +111,9 @@ public class Playing extends State implements Statemethods {
     private void checkDeathZone() {
         float playerY = player.getHitbox().y + player.getHitbox().height + 1;
 
-        int height = Game.GAME_HEIGHT;
+        int height = Game.GAME_HEIGHT*2;
 
-        System.out.println(playerY + " " + height);
+//        System.out.println(playerY + " " + height);
 
         if (playerY >= height) {
             setGameOver(true);

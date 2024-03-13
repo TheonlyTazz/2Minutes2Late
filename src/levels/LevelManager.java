@@ -10,6 +10,8 @@ public class LevelManager {
     private Game game;
     private BufferedImage[] levelSprite;
     private Level levelOne;
+    private int levelHeight;
+    private int levelWidth;
 
 
     public LevelManager(Game game){
@@ -17,6 +19,7 @@ public class LevelManager {
         //levelSprite = LoadSave.getSpriteAtlas(LoadSave.LEVEL_ATLAS);
         importOutsideSprites();
         levelOne = new Level(LoadSave.GetLevelData());
+
 
     }
 
@@ -31,6 +34,7 @@ public class LevelManager {
             }
     }
 
+    //TODO: Fix Game.TILES_IN_HEIGHT*2
     public void draw(Graphics g, int xLvlOffset, int yLvlOffset) {
         for(int height = 0; height < Game.TILES_IN_HEIGHT*2; height++)
             for(int width = 0; width < levelOne.getLevelData()[0].length; width++){
@@ -41,9 +45,17 @@ public class LevelManager {
 
     }
     public void update(){
-
+    }
+    public int getLevelHeight() {
+        return levelHeight;
+    }
+    public int getLevelWidth() {
+        return levelWidth;
     }
     public Level getCurrentLevel(){
+        levelHeight = levelOne.getLevelData().length;
+        levelWidth = levelOne.getLevelData()[1].length;
+
         return levelOne;
     }
 }
