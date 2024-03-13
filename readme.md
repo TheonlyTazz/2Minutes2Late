@@ -21,7 +21,6 @@ Malte, [Leeroy](https://github.com/TheonlyTazz), Kevin, [Marcel](https://github.
 - Inventar
 - Paralaxhintergrund
 - Goldsystem
-- Java Processing3
 
 ## Lizenz
 
