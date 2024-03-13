@@ -6,10 +6,10 @@ import java.awt.*;
 
 public class Constants {
 	public static class ColorMapConstants {
-		public static final Color CRABBY = Color.decode("0xff00ff00");
 	}
 	public static class EnemyConstants {
 		public static final int CRABBY = 0;
+		public static final Color CRABBY_COLOR = Color.decode("0x0b8000");
 
 		public static final int IDLE = 0;
 		public static final int RUNNING = 1;
@@ -108,6 +108,10 @@ public class Constants {
 			public static final int VOLUME_WIDTH = (int) (VOLUME_DEFAULT_WIDTH * Game.SCALE);
 			public static final int VOLUME_HEIGHT = (int) (VOLUME_DEFAULT_HEIGHT * Game.SCALE);
 			public static final int SLIDER_WIDTH = (int) (SLIDER_DEFAULT_WIDTH * Game.SCALE);
+		}
+
+		public static class Background {
+			public static final int BG_DEFAULT_SIZE = 128;
 		}
 	}
 

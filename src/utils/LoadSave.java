@@ -13,6 +13,7 @@ import entities.Crabby;
 import main.Game;
 
 import static utils.Constants.EnemyConstants.CRABBY;
+import static utils.Constants.EnemyConstants.CRABBY_COLOR;
 
 public class LoadSave {
 
@@ -27,6 +28,7 @@ public class LoadSave {
     public static final String URM_BUTTONS = "UI/urm_buttons.png";
     public static final String VOLUME_BUTTONS = "UI/volume_buttons.png";
     public static final String PLAYING_BG_IMG = "Level/playing_bg_img.png";
+    public static final String EDIT_BG_IMG = "UI/background_tile.png";
     public static final String BIG_CLOUDS = "Level/big_clouds.png";
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
@@ -57,8 +59,7 @@ public class LoadSave {
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i, j));
-                int value = color.getGreen();
-                if (value == CRABBY) //0
+                if(color.equals(CRABBY_COLOR))
                     list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
@@ -67,6 +68,7 @@ public class LoadSave {
 
     public static int[][] GetLevelData() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
+
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
 
         for (int j = 0; j < img.getHeight(); j++)

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import gamestates.Gamestate;
 import gamestates.Menu;
 import gamestates.Playing;
+import gamestates.EditMode;
 
 public class Game implements Runnable {
 
@@ -15,6 +16,7 @@ public class Game implements Runnable {
 
 	private Playing playing;
 	private Menu menu;
+	private EditMode edit;
 
 	public final static int TILES_DEFAULT_SIZE = 32;
 	public final static float SCALE = 2f;
@@ -42,6 +44,7 @@ public class Game implements Runnable {
 	private void initClasses() {
 		menu = new Menu(this);
 		playing = new Playing(this);
+		edit = new EditMode(this);
 	}
 
 	private void startGameLoop() {
@@ -56,6 +59,9 @@ public class Game implements Runnable {
 			break;
 		case PLAYING:
 			playing.update();
+			break;
+		case EDIT:
+//			edit.update();
 			break;
 		case OPTIONS:
 		case QUIT:
@@ -74,6 +80,8 @@ public class Game implements Runnable {
 		case PLAYING:
 			playing.draw(g);
 			break;
+		case EDIT:
+			edit.draw(g);
 		default:
 			break;
 		}

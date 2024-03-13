@@ -29,6 +29,7 @@ public class Player extends Entity {
 	private float gravity = 0.04f * Game.SCALE;
 	private float jumpSpeed = -2.25f * Game.SCALE;
 	private float fallSpeedAfterCollision = 0.5f * Game.SCALE;
+	private float maxFallSpeed = 1.5f * Game.SCALE;
 	private boolean inAir = false;
 
 	// StatusBarUI
@@ -203,6 +204,10 @@ public class Player extends Entity {
 			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
 				hitbox.y += airSpeed;
 				airSpeed += gravity;
+				if (airSpeed > maxFallSpeed) {
+					airSpeed = maxFallSpeed;
+				}
+
 				updateXPos(xSpeed);
 			} else {
 				hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
