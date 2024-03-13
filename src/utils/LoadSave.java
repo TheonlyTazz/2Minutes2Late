@@ -28,7 +28,8 @@ public class LoadSave {
     public static final String URM_BUTTONS = "UI/urm_buttons.png";
     public static final String VOLUME_BUTTONS = "UI/volume_buttons.png";
     public static final String PLAYING_BG_IMG = "Level/playing_bg_img.png";
-    public static final String EDIT_BG_IMG = "UI/background_tile.png";
+    public static final String EDIT_BG_IMG = "UI/level_editor_background.png";
+    public static final String EDIT_BG_map = "UI/level_designer/map.png";
     public static final String BIG_CLOUDS = "Level/big_clouds.png";
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
@@ -66,6 +67,22 @@ public class LoadSave {
 
     }
 
+    public static int[][] GetMenuData() {
+        BufferedImage img = GetSpriteAtlas(EDIT_BG_map);
+        int multiplier = 25;
+        int[][] data = new int[img.getHeight()][img.getWidth()];
+        for(int i = 0; i < img.getHeight(); i++)
+            for(int j = 0; j < img.getWidth(); j++){
+                Color color = new Color(img.getRGB(j, i));
+                int value = color.getRed();
+                if (value > 25*3*3){
+                    data[i][j] = 5; //default middle
+                } else{
+                    data[i][j] = value / multiplier;
+                }
+            }
+        return data;
+    }
     public static int[][] GetLevelData() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
 
