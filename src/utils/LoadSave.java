@@ -68,7 +68,8 @@ public class LoadSave {
     public static int[][] GetLevelData() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
-
+        System.out.println("ImgY: " + img.getHeight());
+        System.out.println("ImgX: " + img.getWidth());
         for (int j = 0; j < img.getHeight(); j++)
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i, j));
