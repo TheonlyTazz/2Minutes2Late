@@ -331,7 +331,7 @@ public class Player extends Entity {
 		moving = false;
 		playerAction = IDLE;
 		currentHealth = maxHealth;
-
+		setSpawn();
 		hitbox.x = x;
 		hitbox.y = y;
 
