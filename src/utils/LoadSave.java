@@ -83,8 +83,8 @@ public class LoadSave {
             }
         return data;
     }
-    public static int[][] GetLevelData() {
-        BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
+    public static int[][] GetLevelData(String level) {
+        BufferedImage img = GetSpriteAtlas(level);
 
         int[][] lvlData = new int[img.getHeight()][img.getWidth()];
 

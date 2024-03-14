@@ -12,21 +12,23 @@ public class ObjectManager {
     private EditMode editMode;
     private BufferedImage[] tilesArr;
     private ArrayList<Object> tilesList;
+    private ObjectContainer objectContainer;
+
 
     public ObjectManager(EditMode editMode) {
         this.editMode = editMode;
         loadTiles();
         createTilesList();
-
     }
+
     private void createTilesList() {
         tilesList = new ArrayList<>();
         Color color = Color.red;
         for(BufferedImage tile : tilesArr) {
             tilesList.add(new Object(tile, color));
         }
-
     }
+
     private void loadTiles() {
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
         int width = temp.getWidth() / Game.TILES_DEFAULT_SIZE;
@@ -40,5 +42,16 @@ public class ObjectManager {
     }
     public ArrayList<Object> getTilesList() {
         return tilesList;
+    }
+
+    private ObjectContainer fillObjectContainer(ArrayList<Object> tilesList) {
+        ObjectContainer objectContainer = new ObjectContainer(tilesList);
+        return objectContainer;
+    }
+    private ObjectContainer getObjectContainer() {
+        if(objectContainer == null) {
+            return null;
+        }
+        return objectContainer;
     }
 }

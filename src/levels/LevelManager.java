@@ -9,18 +9,43 @@ import java.awt.image.BufferedImage;
 public class LevelManager {
     private Game game;
     private BufferedImage[] levelSprite;
-    private Level levelOne;
-    private int levelHeight;
-    private int levelWidth;
-
+    private Level level;
+    private int lvlTilesWidth, lvlTilesHeight;
+    private int maxXTilesOffset, maxYTilesOffset;
+    private int maxLvlOffsetX, maxLvlOffsetY;
 
     public LevelManager(Game game){
         this.game = game;
         //levelSprite = LoadSave.getSpriteAtlas(LoadSave.LEVEL_ATLAS);
         importOutsideSprites();
-        levelOne = new Level(LoadSave.GetLevelData());
+        level = new Level(LoadSave.GetLevelData(LoadSave.LEVEL_ONE_DATA));
 
 
+    }
+
+    public int getLvlTilesWidth() {
+        if(level == null) return 0;
+        return this.getCurrentLevel().getLevelWidth() * Game.TILES_SIZE;
+    }
+    public int getLvlTilesHeight() {
+        if(level == null) return 0;
+        return this.getCurrentLevel().getLevelHeight() * Game.TILES_SIZE;
+    }
+    public int getMaxXTilesOffset() {
+        if(level == null) return 0;
+        return this.getLvlTilesWidth() * Game.TILES_IN_WIDTH;
+    }
+    public int getMaxYTilesOffset() {
+        if(level == null) return 0;
+        return this.getLvlTilesHeight() * Game.TILES_IN_HEIGHT;
+    }
+    public int getMaxLvlOffsetX() {
+        if(level == null) return 0;
+        return this.getMaxXTilesOffset() * Game.TILES_SIZE;
+    }
+    public int getMaxLvlOffsetY() {
+        if(level == null) return 0;
+        return this.getMaxYTilesOffset() * Game.TILES_SIZE;
     }
 
     private void importOutsideSprites() {
@@ -34,11 +59,10 @@ public class LevelManager {
             }
     }
 
-    //TODO: Fix Game.TILES_IN_HEIGHT*2
     public void draw(Graphics g, int xLvlOffset, int yLvlOffset) {
-        for(int height = 0; height < Game.TILES_IN_HEIGHT*2; height++)
-            for(int width = 0; width < levelOne.getLevelData()[0].length; width++){
-                int index = levelOne.getSpriteIndex(height, width);
+        for(int height = 0; height < this.getCurrentLevel().getLevelHeight(); height++)
+            for(int width = 0; width < this.getCurrentLevel().getLevelWidth(); width++){
+                int index = this.getCurrentLevel().getSpriteIndex(height, width);
                 if(levelSprite[index] != null && index != 0){
                     g.drawImage(levelSprite[index], Game.TILES_SIZE * width - xLvlOffset, Game.TILES_SIZE * height - yLvlOffset, Game.TILES_SIZE, Game.TILES_SIZE, null);
                 }
@@ -48,16 +72,8 @@ public class LevelManager {
     }
     public void update(){
     }
-    public int getLevelHeight() {
-        return levelHeight;
-    }
-    public int getLevelWidth() {
-        return levelWidth;
-    }
-    public Level getCurrentLevel(){
-        levelHeight = levelOne.getLevelData().length;
-        levelWidth = levelOne.getLevelData()[1].length;
 
-        return levelOne;
+    public Level getCurrentLevel(){
+        return level;
     }
 }

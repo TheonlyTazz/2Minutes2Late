@@ -8,9 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-import entities.Crabby;
 import entities.EnemyManager;
-import entities.Entity;
 import entities.Player;
 import levels.LevelManager;
 import main.Game;
@@ -33,12 +31,6 @@ public class Playing extends State implements Statemethods {
     private int rightBorder = (int) (0.8 * Game.GAME_WIDTH);
     private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
     private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
-    private int lvlTilesWide = LoadSave.GetLevelData()[0].length;
-    private int lvlTilesHeight = LoadSave.GetLevelData().length;
-    private int maxXTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH;
-    private int maxYTilesOffset = lvlTilesHeight - Game.TILES_IN_HEIGHT;
-    private int maxLvlOffsetX = maxXTilesOffset * Game.TILES_SIZE;
-    private int maxLvlOffsetY = maxYTilesOffset * Game.TILES_SIZE;
 
     private BufferedImage backgroundImg, bigCloud, smallCloud;
     private int[] smallCloudsPos;
@@ -84,6 +76,8 @@ public class Playing extends State implements Statemethods {
     private void checkCloseToBorder() {
         int playerX = (int) player.getHitbox().x;
         int playerY = (int) player.getHitbox().y;
+        int maxLvlOffsetX = levelManager.getMaxLvlOffsetX();
+        int maxLvlOffsetY = levelManager.getMaxLvlOffsetY();
         int xDiff = playerX - xLvlOffset;
         int yDiff = playerY - yLvlOffset;
 
@@ -111,9 +105,9 @@ public class Playing extends State implements Statemethods {
     private void checkDeathZone() {
         float playerY = player.getHitbox().y + player.getHitbox().height + 1;
 
-        int height = Game.GAME_HEIGHT*2;
+        int height = levelManager.getCurrentLevel().getLevelHeight() * Game.TILES_SIZE;
 
-//        System.out.println(playerY + " " + height);
+        System.out.println(playerY + " " + height);
 
         if (playerY >= height) {
             setGameOver(true);
