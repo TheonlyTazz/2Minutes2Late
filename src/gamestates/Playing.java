@@ -53,8 +53,7 @@ public class Playing extends State implements Statemethods {
     private void initClasses() {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
-        player = new Player(200, 800, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this);
-        player.loadLvlData(levelManager.getCurrentLevel().getLevelData());
+        player = new Player(200, 800, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
     }
@@ -62,12 +61,11 @@ public class Playing extends State implements Statemethods {
     @Override
     public void update() {
         if (!paused && !gameOver) {
-
             levelManager.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
-            checkDeathZone();
+            //checkDeathZone();
         } else
             pauseOverlay.update();
 
@@ -92,7 +90,7 @@ public class Playing extends State implements Statemethods {
             xLvlOffset = 0;
 
         if (yDiff > topBorder)
-            yLvlOffset += yDiff + topBorder;
+            yLvlOffset += yDiff - topBorder;
         else if (yDiff < bottomBorder)
             yLvlOffset += yDiff - bottomBorder;
 
@@ -181,6 +179,9 @@ public class Playing extends State implements Statemethods {
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
                     break;
+                case KeyEvent.VK_2:
+                    levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
+                    this.resetAll();
             }
     }
 

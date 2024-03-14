@@ -10,6 +10,7 @@ import java.awt.geom.Rectangle2D.Float;
 import java.awt.image.BufferedImage;
 
 import gamestates.Playing;
+import levels.LevelManager;
 import main.Game;
 import utils.LoadSave;
 
@@ -23,7 +24,7 @@ public class Player extends Entity {
 	private int[][] lvlData;
 	private float xDrawOffset = 21 * Game.SCALE;
 	private float yDrawOffset = 4 * Game.SCALE;
-
+	private LevelManager levelManager;
 	// Jumping / Gravity
 	private float airSpeed = 0f;
 	private float gravity = 0.04f * Game.SCALE;
@@ -58,12 +59,15 @@ public class Player extends Entity {
 	private boolean attackChecked;
 	private Playing playing;
 
-	public Player(float x, float y, int width, int height, Playing playing) {
+	public Player(float x, float y, int width, int height, Playing playing, LevelManager levelManager) {
 		super(x, y, width, height);
 		this.playing = playing;
+		this.levelManager = levelManager;
+
 		loadAnimations();
 		initHitbox(x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
 		initAttackBox();
+		this.loadlvlData();
 	}
 
 	private void initAttackBox() {
@@ -201,7 +205,7 @@ public class Player extends Entity {
 				inAir = true;
 
 		if (inAir) {
-			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
+			if (CanMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, levelManager.getCurrentLevel().getLevelData())) {
 				hitbox.y += airSpeed;
 				airSpeed += gravity;
 				if (airSpeed > maxFallSpeed) {
@@ -262,8 +266,8 @@ public class Player extends Entity {
 		statusBarImg = LoadSave.GetSpriteAtlas(LoadSave.STATUS_BAR);
 	}
 
-	public void loadLvlData(int[][] lvlData) {
-		this.lvlData = lvlData;
+	public void loadlvlData() {
+		this.lvlData = levelManager.getCurrentLevel().lvlData;
 		if (!IsEntityOnFloor(hitbox, lvlData))
 			inAir = true;
 	}
@@ -328,6 +332,7 @@ public class Player extends Entity {
 
 		if (!IsEntityOnFloor(hitbox, lvlData))
 			inAir = true;
+		this.loadlvlData();
 	}
 
 }

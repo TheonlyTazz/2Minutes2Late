@@ -16,9 +16,14 @@ public class LevelManager {
 
     public LevelManager(Game game){
         this.game = game;
-        //levelSprite = LoadSave.getSpriteAtlas(LoadSave.LEVEL_ATLAS);
         importOutsideSprites();
-        level = new Level(LoadSave.GetLevelData(LoadSave.LEVEL_ONE_DATA));
+        loadLevel(LoadSave.LEVEL_ONE_DATA);
+
+
+    }
+    public void loadLevel(String levelName){
+        System.out.println("Loading level " + levelName);
+        level = new Level(LoadSave.GetLevelData(levelName));
 
 
     }
