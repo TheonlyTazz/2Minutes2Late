@@ -8,7 +8,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class ObjectContainer {
-    private int x,y,width,height;
+    private int x = (int)(Game.GAME_WIDTH - Game.TILES_SIZE*5);
+    private int y;
+    private int width,height;
     private ArrayList<Object> objects;
     private ObjectButton[] buttons;
 
@@ -16,6 +18,7 @@ public class ObjectContainer {
         this.objects = objects;
         loadButtons(objects);
         System.out.println(buttons.length);
+
     }
 
     public void loadButtons(ArrayList<Object> objects) {
@@ -24,18 +27,19 @@ public class ObjectContainer {
         int buttonX = x + borderOffset;
         int buttonY = y + borderOffset;
         for(Object o : objects){
+            if(objects.indexOf(o) % 2 == 0){
+                buttonX = x + Game.TILES_SIZE;
+                buttonY += (int) (Game.TILES_SIZE * 1.5);
+            } else{
+                buttonX += Game.TILES_SIZE * 2;
+            }
             buttons[objects.indexOf(o)] = new ObjectButton(
                     buttonX,
                     buttonY,
-                    Game.TILES_DEFAULT_SIZE,
-                    Game.TILES_DEFAULT_SIZE,
+                    Game.TILES_SIZE,
+                    Game.TILES_SIZE,
                     o);
-            if(objects.indexOf(o) % 2 == 0){
-                buttonX = x + Game.TILES_DEFAULT_SIZE;
-                buttonY += (int) (Game.TILES_DEFAULT_SIZE * 1.5);
-            } else{
-                buttonX += (int) (Game.TILES_DEFAULT_SIZE * 1.5);
-            }
+
         }
 
     }

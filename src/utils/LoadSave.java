@@ -28,7 +28,7 @@ public class LoadSave {
     public static final String SOUND_BUTTONS = "UI/sound_button.png";
     public static final String URM_BUTTONS = "UI/urm_buttons.png";
     public static final String VOLUME_BUTTONS = "UI/volume_buttons.png";
-    public static final String PLAYING_BG_IMG = "Level/cyberpunk-street.png";
+    public static final String PLAYING_BG_IMG = "Level/city.png";
     public static final String EDIT_BG_IMG = "UI/level_editor_background.png";
     public static final String EDIT_BG_map = "UI/level_designer/map.png";
     public static final String BIG_CLOUDS = "Level/big_clouds.png";

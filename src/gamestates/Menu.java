@@ -12,14 +12,14 @@ import utils.LoadSave;
 public class Menu extends State implements Statemethods {
 
 	private MenuButton[] buttons = new MenuButton[3];
-	private BufferedImage backgroundImg, backgroundImgPink;
+	private BufferedImage backgroundImg, backgroundImgLogo;
 	private int menuX, menuY, menuWidth, menuHeight;
 
 	public Menu(Game game) {
 		super(game);
 		loadButtons();
 		loadBackground();
-		backgroundImgPink = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND_IMG);
+		backgroundImgLogo = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND_IMG);
 
 	}
 
@@ -27,15 +27,15 @@ public class Menu extends State implements Statemethods {
 		backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND);
 		menuWidth = (int) (backgroundImg.getWidth() * Game.SCALE);
 		menuHeight = (int) (backgroundImg.getHeight() * Game.SCALE);
-		menuX = Game.GAME_WIDTH / 2 - menuWidth / 2;
+		menuX = Game.GAME_WIDTH / 5 - menuWidth / 2;
 		menuY = (int) (45 * Game.SCALE);
 
 	}
 
 	private void loadButtons() {
-		buttons[0] = new MenuButton(Game.GAME_WIDTH / 2, (int) (150 * Game.SCALE), 0, Gamestate.PLAYING);
-		buttons[1] = new MenuButton(Game.GAME_WIDTH / 2, (int) (220 * Game.SCALE), 1, Gamestate.EDIT);
-		buttons[2] = new MenuButton(Game.GAME_WIDTH / 2, (int) (290 * Game.SCALE), 2, Gamestate.QUIT);
+		buttons[0] = new MenuButton(Game.GAME_WIDTH / 5, (int) (150 * Game.SCALE), 0, Gamestate.PLAYING);
+		buttons[1] = new MenuButton(Game.GAME_WIDTH / 5, (int) (220 * Game.SCALE), 1, Gamestate.EDIT);
+		buttons[2] = new MenuButton(Game.GAME_WIDTH / 5, (int) (290 * Game.SCALE), 2, Gamestate.QUIT);
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class Menu extends State implements Statemethods {
 	@Override
 	public void draw(Graphics g) {
 
-		g.drawImage(backgroundImgPink, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-		g.drawImage(backgroundImg, menuX, menuY, menuWidth, menuHeight, null);
+		g.drawImage(backgroundImgLogo, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+//		g.drawImage(backgroundImg, menuX, menuY, menuWidth, menuHeight, null);
 
 		for (MenuButton mb : buttons)
 			mb.draw(g);

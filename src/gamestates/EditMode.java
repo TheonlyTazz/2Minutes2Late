@@ -1,7 +1,11 @@
 package gamestates;
 
-import editor.Object;
+import editor.EditorMap;
 import editor.ObjectManager;
+import editor.Tool;
+import editor.tools.Bucket;
+import editor.tools.Pencil;
+import editor.tools.Picker;
 import levels.LevelManager;
 import levels.Level;
 import main.Game;
@@ -12,9 +16,12 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import ui.Button;
 import ui.buttons.ObjectButton;
+import ui.buttons.SoundButton;
 import utils.LoadSave;
+
+import static utils.Constants.UI.PauseButtons.SOUND_SIZE;
+import static utils.Constants.UI.PauseButtons.SOUND_SIZE_DEFAULT;
 
 
 public class EditMode extends State implements Statemethods{
@@ -22,6 +29,8 @@ public class EditMode extends State implements Statemethods{
     private ObjectButton[] buttons;
     private LevelManager levelManager;
     private Level menu;
+    private EditorMap editorMap;
+    private Tool[] tools;
     private BufferedImage[] menuSprite;
     private BufferedImage backgroundImg, backgroundBorder, backgroundCorner;
     private BufferedImage pickedTile;
@@ -37,17 +46,31 @@ public class EditMode extends State implements Statemethods{
     private void initClasses() {
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
-
         menu = new Level(LoadSave.GetMenuData());
+        editorMap = new EditorMap(40, 25);
         importOutsideSprites();
         loadButtons();
+        loadTools();
+
     }
 
     private void loadButtons(){
         buttons = objectManager.getObjectContainer().getButtons();
     }
+    private void loadTools(){
+        tools = new Tool[3];
+        tools[0] = new Picker("Picker");
+        tools[0].setButton(new SoundButton(32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[1] = new Pencil("Pencil");
+        tools[1].setButton(new SoundButton(32 + SOUND_SIZE + 16, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[2] = new Bucket("Bucket");
+        tools[2].setButton(new SoundButton(32 + SOUND_SIZE*2 + 32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+    }
     @Override
     public void update() {
+        for(Tool t : tools){
+            t.update();
+        }
     }
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
@@ -74,6 +97,10 @@ public class EditMode extends State implements Statemethods{
     public void draw(Graphics g) {
         loadBackground(g);
         objectManager.drawContainer(g);
+        editorMap.draw(g);
+        for(Tool tool : tools){
+            tool.draw(g);
+        }
     }
 
     @Override

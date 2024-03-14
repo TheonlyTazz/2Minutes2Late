@@ -4,13 +4,13 @@ import main.Game;
 
 import java.awt.*;
 
-public class Map {
+public class EditorMap {
     private int[][] map;
     private int width;
     private int height;
     private int xOff = Game.TILES_DEFAULT_SIZE;
     private int yOff = Game.TILES_DEFAULT_SIZE*2;
-    public Map(int width, int height) {
+    public EditorMap(int width, int height) {
         this.width = width;
         this.height = height;
         map = new int[width][height];
