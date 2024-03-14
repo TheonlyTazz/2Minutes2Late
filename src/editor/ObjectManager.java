@@ -5,12 +5,12 @@ import main.Game;
 import utils.LoadSave;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class ObjectManager {
     private EditMode editMode;
-    private BufferedImage[] tilesArr;
     private ArrayList<Object> tilesList;
     private ObjectContainer objectContainer;
 
@@ -29,7 +29,7 @@ public class ObjectManager {
 
         int width = temp.getWidth() / Game.TILES_DEFAULT_SIZE;
         int height = temp.getHeight() / Game.TILES_DEFAULT_SIZE;
-        tilesArr = new BufferedImage[width * height];
+        BufferedImage[] tilesArr = new BufferedImage[width * height];
         for(int j = 0; j < height; j++) {
             for(int i = 0; i < width; i++) {
                 int index = i + width * j;
@@ -47,7 +47,7 @@ public class ObjectManager {
     private ObjectContainer fillObjectContainer(ArrayList<Object> tilesList) {
         return new ObjectContainer(tilesList);
     }
-    private ObjectContainer getObjectContainer() {
+    public ObjectContainer getObjectContainer() {
         if(objectContainer == null) {
             return null;
         }
@@ -56,5 +56,9 @@ public class ObjectManager {
 
     public void drawContainer(Graphics g) {
         objectContainer.draw(g);
+    }
+
+    public void mousePressed(MouseEvent e) {
+
     }
 }

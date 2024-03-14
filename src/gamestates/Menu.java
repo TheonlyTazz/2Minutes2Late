@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import main.Game;
-import ui.MenuButton;
+import ui.buttons.MenuButton;
 import utils.LoadSave;
 
 public class Menu extends State implements Statemethods {

@@ -1,5 +1,6 @@
 package gamestates;
 
+import editor.Object;
 import editor.ObjectManager;
 import levels.LevelManager;
 import levels.Level;
@@ -9,21 +10,22 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
-import entities.Player;
-import utils.Constants;
+import ui.Button;
+import ui.buttons.ObjectButton;
 import utils.LoadSave;
 
-import static utils.Constants.Environment.*;
-import static utils.Constants.UI.*;
 
 public class EditMode extends State implements Statemethods{
     private ObjectManager objectManager;
+    private ObjectButton[] buttons;
     private LevelManager levelManager;
     private Level menu;
     private BufferedImage[] menuSprite;
     private BufferedImage backgroundImg, backgroundBorder, backgroundCorner;
     private BufferedImage pickedTile;
+
 
 
     public EditMode(Game game) {
@@ -35,13 +37,17 @@ public class EditMode extends State implements Statemethods{
     private void initClasses() {
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager(this);
+
         menu = new Level(LoadSave.GetMenuData());
         importOutsideSprites();
+        loadButtons();
+    }
 
+    private void loadButtons(){
+        buttons = objectManager.getObjectContainer().getButtons();
     }
     @Override
     public void update() {
-        levelManager.update();
     }
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
@@ -76,8 +82,12 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void mousePressed(MouseEvent e) {
-//        System.out.println("x: " + e.getX() + " y: " + e.getY());
-
+        for(ObjectButton ob : buttons){
+            if(isIn(e, ob)){
+                System.out.println("Pressed Button: " + Arrays.stream(buttons).toList().indexOf(ob));
+                ob.setMousePressed(true);
+            }
+        }
     }
 
     @Override
@@ -87,6 +97,12 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        for(ObjectButton ob : buttons){
+            if(isIn(e, ob)){
+                System.out.println("Hovering over: " + Arrays.stream(buttons).toList().indexOf(ob));
+                ob.setMouseOver(true);
+            }
+        }
 
 
     }
