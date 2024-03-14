@@ -1,6 +1,8 @@
 package gamestates;
 
+import editor.ObjectManager;
 import levels.LevelManager;
+import levels.Level;
 import main.Game;
 
 import java.awt.*;
@@ -16,52 +18,64 @@ import static utils.Constants.Environment.*;
 import static utils.Constants.UI.*;
 
 public class EditMode extends State implements Statemethods{
+    private ObjectManager objectManager;
     private LevelManager levelManager;
-
-
-    private BufferedImage backgroundImg;
+    private Level menu;
+    private BufferedImage[] menuSprite;
+    private BufferedImage backgroundImg, backgroundBorder, backgroundCorner;
     private BufferedImage pickedTile;
+
 
     public EditMode(Game game) {
         super(game);
         initClasses();
-        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
 
     }
 
     private void initClasses() {
         levelManager = new LevelManager(game);
+        objectManager = new ObjectManager(this);
+        menu = new Level(LoadSave.GetMenuData());
+        importOutsideSprites();
+
     }
     @Override
     public void update() {
+        levelManager.update();
+//        objectManager.update();
+    }
+    private void importOutsideSprites() {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
+        menuSprite = new BufferedImage[9];
+        for(int j = 0; j < 3; j++)
+            for(int i = 0; i < 3; i++){
+                int index = j*3 + i;
+                menuSprite[index] = img.getSubimage(i*32, j*32, 32 ,32);
+
+            }
+    }
+    public void loadBackground(Graphics g) {
+        int[][] menuData = menu.getLevelData();
+            for(int height = 0; height < Game.TILES_IN_HEIGHT; height++)
+                for(int width = 0; width < menu.getLevelData()[0].length; width++) {
+                    int index = menu.getSpriteIndex(height, width) - 1;
+                    g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
+                }
 
     }
 
     @Override
     public void draw(Graphics g) {
-        for(int y = 0; y < Game.TILES_IN_HEIGHT; y++){
-            for(int x = 0; x < Game.TILES_IN_WIDTH; x++){
-                System.out.println("x: " + x*Background.BG_DEFAULT_SIZE  + ", y: " + (y*Background.BG_DEFAULT_SIZE));
-                g.drawImage(backgroundImg,
-                        x*Background.BG_DEFAULT_SIZE / (int) Game.SCALE,
-                        (y*Background.BG_DEFAULT_SIZE) / (int) Game.SCALE,
-                        32,
-                        32,
-                        null);
-            }
-
-        }
-        g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-
+        loadBackground(g);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        System.out.println(e.getX() + " " + e.getY());
 
     }
 
@@ -77,7 +91,7 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        System.out.println("Key pressed");
     }
 
     @Override
