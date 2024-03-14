@@ -1,8 +1,12 @@
-package ui;
+package ui.overlays;
 
 import gamestates.Gamestate;
 import gamestates.Playing;
 import main.Game;
+import ui.buttons.PauseButton;
+import ui.buttons.SoundButton;
+import ui.buttons.UrmButton;
+import ui.buttons.VolumeButton;
 import utils.LoadSave;
 
 import java.awt.*;

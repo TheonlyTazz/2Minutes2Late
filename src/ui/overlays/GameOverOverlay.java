@@ -1,4 +1,4 @@
-package ui;
+package ui.overlays;
 
 import java.awt.Color;
 import java.awt.Graphics;

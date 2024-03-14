@@ -1,4 +1,4 @@
-package ui;
+package ui.buttons;
 
 import utils.LoadSave;
 import static utils.Constants.UI.PauseButtons.*;

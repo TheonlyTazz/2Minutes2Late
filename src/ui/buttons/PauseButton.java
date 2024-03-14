@@ -1,13 +1,14 @@
-package ui;
+package ui.buttons;
+
+import ui.Button;
 
 import java.awt.*;
 
-public class PauseButton {
+public class PauseButton extends Button {
 
-    protected int x,y,width, height;
-    protected Rectangle bounds;
 
     public PauseButton(int x, int y, int width, int height) {
+        super(x, y, width, height);
         this.x = x;
         this.y = y;
         this.width = width;

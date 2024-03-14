@@ -1,4 +1,4 @@
-package ui;
+package ui.buttons;
 
 import utils.LoadSave;
 

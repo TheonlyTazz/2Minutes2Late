@@ -1,6 +1,7 @@
-package ui;
+package ui.buttons;
 
 import gamestates.Gamestate;
+import ui.Button;
 import utils.LoadSave;
 
 import java.awt.*;
@@ -8,17 +9,18 @@ import java.awt.image.BufferedImage;
 
 import static utils.Constants.UI.Buttons.*;
 
-public class MenuButton {
-    private int xPos, yPos, rowIndex, index;
+public class MenuButton extends Button {
+    private int rowIndex, index;
     private int xOffsetCenter = B_WIDTH / 2;
     private Gamestate state;
     private BufferedImage[] imgs;
     private boolean mouseOver, mousePressed;
     private Rectangle bounds;
 
-    public MenuButton(int xPos, int yPos, int rowIndex, Gamestate state){
-        this.xPos = xPos;
-        this.yPos = yPos;
+    public MenuButton(int x, int y, int rowIndex, Gamestate state){
+        super(x,y,B_WIDTH,B_HEIGHT);
+        this.x = x;
+        this.y = y;
         this.rowIndex = rowIndex;
         this.state = state;
         loadImgs();
@@ -29,7 +31,7 @@ public class MenuButton {
     }
 
     private void initBounds() {
-        bounds = new Rectangle(xPos-xOffsetCenter, yPos, B_WIDTH, B_HEIGHT);
+        bounds = new Rectangle(x -xOffsetCenter, y, B_WIDTH, B_HEIGHT);
     }
 
     private void loadImgs() {
@@ -40,7 +42,7 @@ public class MenuButton {
     }
 
     public void draw(Graphics g){
-        g.drawImage(imgs[index], xPos - xOffsetCenter, yPos, B_WIDTH, B_HEIGHT, null);
+        g.drawImage(imgs[index], x - xOffsetCenter, y, B_WIDTH, B_HEIGHT, null);
     }
 
     public void update(){
