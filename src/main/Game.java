@@ -140,6 +140,9 @@ public class Game implements Runnable {
 	public Menu getMenu() {
 		return menu;
 	}
+	public EditMode getEdit() {
+		return edit;
+	}
 
 	public Playing getPlaying() {
 		return playing;

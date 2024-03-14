@@ -18,25 +18,25 @@ public class ObjectManager {
     public ObjectManager(EditMode editMode) {
         this.editMode = editMode;
         loadTiles();
-        createTilesList();
+        this.objectContainer = new ObjectContainer(tilesList);
     }
 
-    private void createTilesList() {
-        tilesList = new ArrayList<>();
-        Color color = Color.red;
-        for(BufferedImage tile : tilesArr) {
-            tilesList.add(new Object(tile, color));
-        }
-    }
+
 
     private void loadTiles() {
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
+        tilesList = new ArrayList<>();
+
         int width = temp.getWidth() / Game.TILES_DEFAULT_SIZE;
         int height = temp.getHeight() / Game.TILES_DEFAULT_SIZE;
         tilesArr = new BufferedImage[width * height];
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
-                tilesArr[j + (i*j)] = temp.getSubimage(Game.TILES_DEFAULT_SIZE*i, Game.TILES_DEFAULT_SIZE*j, Game.TILES_DEFAULT_SIZE, Game.TILES_DEFAULT_SIZE);
+        for(int j = 0; j < height; j++) {
+            for(int i = 0; i < width; i++) {
+                int index = i + width * j;
+//                System.out.println(index);
+                tilesArr[index] = temp.getSubimage(Game.TILES_DEFAULT_SIZE*i, Game.TILES_DEFAULT_SIZE*j, Game.TILES_DEFAULT_SIZE, Game.TILES_DEFAULT_SIZE);
+                Color color = new Color(index, 0, 0);
+                tilesList.add(new Object(tilesArr[index], color));
             }
         }
     }
@@ -45,13 +45,16 @@ public class ObjectManager {
     }
 
     private ObjectContainer fillObjectContainer(ArrayList<Object> tilesList) {
-        ObjectContainer objectContainer = new ObjectContainer(tilesList);
-        return objectContainer;
+        return new ObjectContainer(tilesList);
     }
     private ObjectContainer getObjectContainer() {
         if(objectContainer == null) {
             return null;
         }
         return objectContainer;
+    }
+
+    public void drawContainer(Graphics g) {
+        objectContainer.draw(g);
     }
 }

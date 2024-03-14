@@ -14,6 +14,7 @@ import levels.LevelManager;
 import main.Game;
 import ui.GameOverOverlay;
 import ui.PauseOverlay;
+import utils.Constants;
 import utils.LoadSave;
 import static utils.Constants.Environment.*;
 
@@ -38,6 +39,8 @@ public class Playing extends State implements Statemethods {
 
     private boolean gameOver;
 
+    private final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
+
     public Playing(Game game) {
         super(game);
         initClasses();
@@ -52,10 +55,14 @@ public class Playing extends State implements Statemethods {
 
     private void initClasses() {
         levelManager = new LevelManager(game);
+        int startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
+        int startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
         enemyManager = new EnemyManager(this);
-        player = new Player(200, 800, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
+
+        player = new Player(startX, startY, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
+        player.setSpawn();
     }
 
     @Override
@@ -65,7 +72,7 @@ public class Playing extends State implements Statemethods {
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
             checkCloseToBorder();
-            //checkDeathZone();
+            checkDeathZone();
         } else
             pauseOverlay.update();
 
@@ -101,13 +108,11 @@ public class Playing extends State implements Statemethods {
     }
 
     private void checkDeathZone() {
-        float playerY = player.getHitbox().y + player.getHitbox().height + 1;
+        int tileX = (int)player.getHitbox().x / Game.TILES_SIZE;
+        int tileY = (int)player.getHitbox().y / Game.TILES_SIZE;
+        int value = levelManager.getTileValue(tileX, tileY);
 
-        int height = levelManager.getCurrentLevel().getLevelHeight() * Game.TILES_SIZE;
-
-        System.out.println(playerY + " " + height);
-
-        if (playerY >= height) {
+        if (value == DEATH_ZONE) {
             setGameOver(true);
         }
     }
@@ -163,6 +168,7 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         if (gameOver)
             gameOverOverlay.keyPressed(e);
         else
@@ -181,6 +187,10 @@ public class Playing extends State implements Statemethods {
                     break;
                 case KeyEvent.VK_2:
                     levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
+                    this.resetAll();
+                    break;
+                case KeyEvent.VK_1:
+                    levelManager.loadLevel(LoadSave.LEVEL_ONE_DATA);
                     this.resetAll();
             }
     }

@@ -42,7 +42,6 @@ public class EditMode extends State implements Statemethods{
     @Override
     public void update() {
         levelManager.update();
-//        objectManager.update();
     }
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
@@ -64,9 +63,11 @@ public class EditMode extends State implements Statemethods{
 
     }
 
+
     @Override
     public void draw(Graphics g) {
         loadBackground(g);
+        objectManager.drawContainer(g);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println(e.getX() + " " + e.getY());
+//        System.out.println("x: " + e.getX() + " y: " + e.getY());
 
     }
 
@@ -87,11 +88,12 @@ public class EditMode extends State implements Statemethods{
     @Override
     public void mouseMoved(MouseEvent e) {
 
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key pressed");
+//        System.out.println("Key pressed");
     }
 
     @Override

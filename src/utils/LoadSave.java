@@ -35,6 +35,7 @@ public class LoadSave {
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
     public static final String STATUS_BAR = "UI/health_power_bar.png";
+    public static final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
         BufferedImage img = null;
@@ -93,8 +94,9 @@ public class LoadSave {
             for (int i = 0; i < img.getWidth(); i++) {
                 Color color = new Color(img.getRGB(i, j));
                 int value = color.getRed();
-                if (value >= 48)
+                if (value >= 48 && value < 200)
                     value = 0;
+
                 lvlData[j][i] = value;
             }
         return lvlData;

@@ -18,14 +18,12 @@ public class LevelManager {
         this.game = game;
         importOutsideSprites();
         loadLevel(LoadSave.LEVEL_ONE_DATA);
-
-
     }
+
+
     public void loadLevel(String levelName){
         System.out.println("Loading level " + levelName);
         level = new Level(LoadSave.GetLevelData(levelName));
-
-
     }
 
     public int getLvlTilesWidth() {
@@ -53,6 +51,11 @@ public class LevelManager {
         return this.getMaxYTilesOffset() * Game.TILES_SIZE;
     }
 
+    public int getTileValue(int x, int y){
+        if(level == null) return 0;
+        return this.getCurrentLevel().getLevelData()[y][x];
+    }
+
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.LEVEL_ATLAS);
         levelSprite = new BufferedImage[48];
@@ -68,6 +71,7 @@ public class LevelManager {
         for(int height = 0; height < this.getCurrentLevel().getLevelHeight(); height++)
             for(int width = 0; width < this.getCurrentLevel().getLevelWidth(); width++){
                 int index = this.getCurrentLevel().getSpriteIndex(height, width);
+                if(index >= 48) index =0;
                 if(levelSprite[index] != null && index != 0){
                     g.drawImage(levelSprite[index], Game.TILES_SIZE * width - xLvlOffset, Game.TILES_SIZE * height - yLvlOffset, Game.TILES_SIZE, Game.TILES_SIZE, null);
                 }

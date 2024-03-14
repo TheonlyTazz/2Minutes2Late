@@ -59,15 +59,20 @@ public class Player extends Entity {
 	private boolean attackChecked;
 	private Playing playing;
 
-	public Player(float x, float y, int width, int height, Playing playing, LevelManager levelManager) {
+	public Player(int x, int y,int width, int height, Playing playing, LevelManager levelManager) {
 		super(x, y, width, height);
 		this.playing = playing;
 		this.levelManager = levelManager;
 
+		setSpawn();
 		loadAnimations();
 		initHitbox(x, y, (int) (20 * Game.SCALE), (int) (27 * Game.SCALE));
 		initAttackBox();
 		this.loadlvlData();
+	}
+	public void setSpawn(){
+		x = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
+		y = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
 	}
 
 	private void initAttackBox() {

@@ -11,4 +11,7 @@ public class Object {
         this.sprite = sprite;
         this.color = color;
     }
+    public BufferedImage getSprite() {
+        return sprite;
+    }
 }

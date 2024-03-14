@@ -13,6 +13,7 @@ public class Level {
         this.lvlData = lvlData;
         this.levelHeight = lvlData.length;
         this.levelWidth = lvlData[0].length;
+        this.setPlayerStartTile();
     }
 
     public int getSpriteIndex(int x, int y) {
@@ -21,9 +22,17 @@ public class Level {
     public int[] getPlayerStart(){
         return new int[]{playerStartX, playerStartY};
     }
-    public void setPlayerStart(int x, int y) {
-        playerStartX = x;
-        playerStartY = y;
+
+    public void setPlayerStartTile() {
+        for(int y = 0; y < lvlData.length; y++)
+            for(int x = 0; x < lvlData[0].length; x++) {
+                if (lvlData[y][x] == 240) {
+//                    System.out.println("x: " + x + ", y: " + y);
+                    playerStartX = x;
+                    playerStartY = y;
+                }
+            }
+
     }
 
     public int[][] getLevelData() {

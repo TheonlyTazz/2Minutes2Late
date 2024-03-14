@@ -6,6 +6,13 @@ import java.awt.*;
 
 public class Constants {
 	public static class ColorMapConstants {
+		public static class DeathZone {
+			public static final int DEATH_ZONE = 255;
+		}
+
+		public static class Player {
+			public static final int PLAYER_SPAWN = 240;
+		}
 	}
 	public static class EnemyConstants {
 		public static final int CRABBY = 0;
