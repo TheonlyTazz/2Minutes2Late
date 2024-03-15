@@ -5,41 +5,47 @@ import ui.buttons.ObjectButton;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
 
 public class ObjectContainer {
-    private int x = (int)(Game.GAME_WIDTH - Game.TILES_SIZE*5);
-    private int y;
-    private int width,height;
+    private int x = (int)(Game.GAME_WIDTH - Game.TILES_DEFAULT_SIZE*9);
+    private int y = (int)(Game.TILES_DEFAULT_SIZE * 2);
+    private int width = Game.TILES_DEFAULT_SIZE * 8;
+    private int height = Game.TILES_DEFAULT_SIZE * 24;
+    private int scroll = 0;
     private ArrayList<Object> objects;
     private ObjectButton[] buttons;
+    private final Rectangle bounds;
 
     public ObjectContainer(ArrayList<Object> objects) {
         this.objects = objects;
         loadButtons(objects);
         System.out.println(buttons.length);
+        bounds = new Rectangle(x,y,width,height);
+        System.out.println(bounds);
 
     }
-
+    public Rectangle getBounds() {
+        return bounds;
+    }
     public void loadButtons(ArrayList<Object> objects) {
         buttons = new ObjectButton[objects.size()];
-        int borderOffset = Game.TILES_DEFAULT_SIZE / 2;
-        int buttonX = x + borderOffset;
-        int buttonY = y + borderOffset;
+        int buttonX = x;
+        int buttonY = y;
         for(Object o : objects){
-            if(objects.indexOf(o) % 2 == 0){
-                buttonX = x + Game.TILES_SIZE;
-                buttonY += (int) (Game.TILES_SIZE * 1.5);
-            } else{
-                buttonX += Game.TILES_SIZE * 2;
-            }
             buttons[objects.indexOf(o)] = new ObjectButton(
                     buttonX,
                     buttonY,
-                    Game.TILES_SIZE,
-                    Game.TILES_SIZE,
+                    Game.TILES_DEFAULT_SIZE * 3,
+                    Game.TILES_DEFAULT_SIZE * 3,
                     o);
-
+            if(objects.indexOf(o) % 2 == 1){
+                buttonX = x;
+                buttonY += (int) (Game.TILES_DEFAULT_SIZE * 5);
+            } else{
+                buttonX += Game.TILES_DEFAULT_SIZE * 5;
+            }
         }
 
     }
@@ -47,12 +53,24 @@ public class ObjectContainer {
 
     public void draw(Graphics g){
         for(ObjectButton b : buttons){
-            b.draw(g);
+
+            if(isIn(b)){
+                b.draw(g);
+            }
+        }
+        g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    public void update(){
+        for(ObjectButton b : buttons){
+            b.setScroll(scroll);
+            b.update();
+
         }
     }
-    private void update(){
-    }
 
+    public boolean isIn(ObjectButton b){
+        return bounds.contains(b.getBounds());
+    }
     public int getX() {
         return x;
     }
@@ -95,5 +113,16 @@ public class ObjectContainer {
 
     public ObjectButton[] getButtons() {
         return buttons;
+    }
+
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        if(bounds.contains(e.getPoint())){
+            int notches = e.getWheelRotation();
+            if(notches < 0){
+                scroll += notches * Game.TILES_DEFAULT_SIZE;
+            } else if(notches > 0){
+                scroll += notches * Game.TILES_DEFAULT_SIZE;
+            }
+        }
     }
 }

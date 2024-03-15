@@ -6,17 +6,16 @@ import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class ObjectManager {
-    private EditMode editMode;
     private ArrayList<Object> tilesList;
     private ObjectContainer objectContainer;
 
 
-    public ObjectManager(EditMode editMode) {
-        this.editMode = editMode;
+    public ObjectManager() {
         loadTiles();
         this.objectContainer = new ObjectContainer(tilesList);
     }
@@ -54,11 +53,18 @@ public class ObjectManager {
         return objectContainer;
     }
 
-    public void drawContainer(Graphics g) {
+    public void draw(Graphics g) {
         objectContainer.draw(g);
     }
 
+    public void update(){
+        objectContainer.update();
+    }
     public void mousePressed(MouseEvent e) {
 
+    }
+
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        objectContainer.mouseWheelMoved(e);
     }
 }

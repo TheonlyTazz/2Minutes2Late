@@ -1,5 +1,6 @@
 package editor;
 
+import editor.Object;
 import ui.Button;
 import ui.buttons.SoundButton;
 
@@ -12,7 +13,7 @@ public abstract class Tool {
     private Object object;
     protected BufferedImage[] cursor;
     private Boolean active = false;
-
+    private int x,y;
 
     public Tool(String name){
         this.name = name;
@@ -29,7 +30,7 @@ public abstract class Tool {
     public void setActive(Boolean active){
         this.active = active;
     }
-    public java.lang.Object getObject() {
+    public Object getObject() {
         return object;
     }
     public void setObject(Object object) {
@@ -38,9 +39,27 @@ public abstract class Tool {
 
     public void draw(Graphics g){
         button.draw(g);
+        if(object != null){
+            g.drawImage(object.getSprite(), x-2, y-2, null);
+        }
 //        g.drawRect(button.getBounds().x, button.getBounds().y, button.getBounds().width, button.getBounds().height);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     public void update() {
         button.update();

@@ -13,6 +13,7 @@ import main.Game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -31,6 +32,7 @@ public class EditMode extends State implements Statemethods{
     private Level menu;
     private EditorMap editorMap;
     private Tool[] tools;
+    private Tool activeTool;
     private BufferedImage[] menuSprite;
     private BufferedImage backgroundImg, backgroundBorder, backgroundCorner;
     private BufferedImage pickedTile;
@@ -45,12 +47,13 @@ public class EditMode extends State implements Statemethods{
 
     private void initClasses() {
         levelManager = new LevelManager(game);
-        objectManager = new ObjectManager(this);
+        objectManager = new ObjectManager();
         menu = new Level(LoadSave.GetMenuData());
         editorMap = new EditorMap(40, 25);
         importOutsideSprites();
         loadButtons();
         loadTools();
+        activeTool = tools[1];
 
     }
 
@@ -71,6 +74,7 @@ public class EditMode extends State implements Statemethods{
         for(Tool t : tools){
             t.update();
         }
+        objectManager.update();
     }
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
@@ -87,7 +91,12 @@ public class EditMode extends State implements Statemethods{
             for(int height = 0; height < Game.TILES_IN_HEIGHT; height++)
                 for(int width = 0; width < menu.getLevelData()[0].length; width++) {
                     int index = menu.getSpriteIndex(height, width) - 1;
-                    g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
+                    if(index != 4){
+                        g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
+                    }
+                    if(width > 20){
+                        g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
+                    }
                 }
 
     }
@@ -95,8 +104,10 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void draw(Graphics g) {
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
+        g.drawImage(img, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         loadBackground(g);
-        objectManager.drawContainer(g);
+        objectManager.draw(g);
         editorMap.draw(g);
         for(Tool tool : tools){
             tool.draw(g);
@@ -109,12 +120,37 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if(objectManager.getObjectContainer().getBounds().contains(e.getX(), e.getY())){
+            if(activeTool.getObject() != null){
+                activeTool.setObject(null);
+            }
+        }
         for(ObjectButton ob : buttons){
             if(isIn(e, ob)){
                 System.out.println("Pressed Button: " + Arrays.stream(buttons).toList().indexOf(ob));
                 ob.setMousePressed(true);
+                activeTool.setObject(ob.getObject());
             }
         }
+        if(editorMap.getBounds().contains(e.getX(), e.getY())){
+
+            if(activeTool.getObject() != null){
+                int[] tileIndex = new int[2];
+                tileIndex = editorMap.getTile(e.getX(), e.getY());
+
+                if(activeTool instanceof Picker){
+                    editorMap.setTile(activeTool.getObject().getColor(), tileIndex[0], tileIndex[1]);
+                    activeTool.setObject(null);
+                } else if(activeTool instanceof Pencil){
+                    editorMap.setTile(activeTool.getObject().getColor(), tileIndex[0], tileIndex[1]);
+                }
+
+
+            }
+
+
+        }
+
     }
 
     @Override
@@ -124,16 +160,38 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        activeTool.setX(e.getX());
+        activeTool.setY(e.getY());
         for(ObjectButton ob : buttons){
             if(isIn(e, ob)){
-                System.out.println("Hovering over: " + Arrays.stream(buttons).toList().indexOf(ob));
                 ob.setMouseOver(true);
             }
         }
-
-
+        if(objectManager.getObjectContainer().getBounds().contains(e.getX(), e.getY())){
+//            System.out.println("Hovering over: objectContainer");
+        }
     }
 
+    public void mouseDragged(MouseEvent e) {
+        if(editorMap.getBounds().contains(e.getX(), e.getY())){
+            if(activeTool.getObject() != null){
+                int[] tileIndex = new int[2];
+                tileIndex = editorMap.getTile(e.getX(), e.getY());
+
+                int objectColor = activeTool.getObject().getColor().getRGB();
+                int tileColor = editorMap.getMap()[tileIndex[0]][tileIndex[1]];
+
+                if(activeTool instanceof Pencil && objectColor != tileColor){
+                    editorMap.setTile(activeTool.getObject().getColor(), tileIndex[0], tileIndex[1]);
+                }
+
+
+            }
+
+
+        }
+
+    }
     @Override
     public void keyPressed(KeyEvent e) {
 //        System.out.println("Key pressed");
@@ -142,5 +200,9 @@ public class EditMode extends State implements Statemethods{
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        objectManager.mouseWheelMoved(e);
     }
 }

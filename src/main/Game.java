@@ -61,7 +61,7 @@ public class Game implements Runnable {
 			playing.update();
 			break;
 		case EDIT:
-//			edit.update();
+			edit.update();
 			break;
 		case OPTIONS:
 		case QUIT:
