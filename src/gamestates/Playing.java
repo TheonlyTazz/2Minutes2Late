@@ -16,6 +16,7 @@ import ui.overlays.GameOverOverlay;
 import ui.overlays.PauseOverlay;
 import utils.Constants;
 import utils.LoadSave;
+import utils.ResourceLoader;
 
 public class Playing extends State implements Statemethods {
     private Player_old playerOld;
@@ -33,7 +34,8 @@ public class Playing extends State implements Statemethods {
     private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
     private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
 
-    private BufferedImage backgroundImg, bigCloud, smallCloud;
+    private BufferedImage bigCloud, smallCloud;
+    private BufferedImage[] backgroundImg;
 
 
     private boolean gameOver;
@@ -44,8 +46,8 @@ public class Playing extends State implements Statemethods {
         super(game);
         initClasses();
 
-        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
-
+        // backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
+        backgroundImg = ResourceLoader.loadBackground(LoadSave.PLAYING_BG_DIR);
     }
 
     private void initClasses() {
@@ -117,7 +119,9 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        for (BufferedImage background : backgroundImg) {
+            g.drawImage(background, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        }
 
 //        drawClouds(g);
 
@@ -137,7 +141,7 @@ public class Playing extends State implements Statemethods {
     public void resetAll() {
         gameOver = false;
         paused = false;
-        playerOld.resetAll();
+        player.resetAll();
         enemyManager.resetAllEnemies();
     }
 

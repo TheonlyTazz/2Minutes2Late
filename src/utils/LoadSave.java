@@ -29,6 +29,7 @@ public class LoadSave {
     public static final String URM_BUTTONS = "UI/urm_buttons.png";
     public static final String VOLUME_BUTTONS = "UI/volume_buttons.png";
     public static final String PLAYING_BG_IMG = "Level/city.png";
+    public static final String PLAYING_BG_DIR = "res/UI/backgrounds/city-backgrounds-pixel-art/Backgrounds/1/Night";
     public static final String EDIT_BG_IMG = "UI/level_editor_background.png";
     public static final String EDIT_BG_map = "UI/level_designer/map.png";
     public static final String OBJECT_BORDER = "UI/frame.png";

@@ -1,6 +1,9 @@
 package utils;
 
+import com.sun.tools.jconsole.JConsoleContext;
+
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class ResourceLoader {
     private static BufferedImage[] LevelTileSet;
@@ -37,4 +40,27 @@ public class ResourceLoader {
         return sprites;
     }
 
+    public static BufferedImage[] loadBackground(String folder) {
+        File directory = new File(folder);
+
+        File[] listOfFiles = directory.listFiles();
+
+        BufferedImage[] background = new BufferedImage[0];
+        if (listOfFiles != null) {
+            background = new BufferedImage[listOfFiles.length];
+        }
+
+        for (int i = 0; i < background.length; i++) {
+            if (listOfFiles[i].isFile()) {
+
+                String path = listOfFiles[i].getPath();
+                String newPath = path.replace("res\\", "");
+
+                System.out.println(newPath);
+                background[i] = LoadSave.GetSpriteAtlas(newPath);
+            }
+        }
+
+        return background;
+    }
 }

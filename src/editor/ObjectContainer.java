@@ -130,6 +130,9 @@ public class ObjectContainer {
     public void mouseWheelMoved(MouseWheelEvent e) {
         if(bounds.contains(e.getPoint())){
             int notches = e.getWheelRotation();
+
+            notches *= -1;
+
             if(notches < 0){
                 scroll += notches * Game.TILES_DEFAULT_SIZE;
             } else if(notches > 0){
