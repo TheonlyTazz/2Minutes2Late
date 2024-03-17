@@ -1,18 +1,18 @@
 package utils;
 
-import java.awt.Color;
+import java.awt.*;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import entities.Crabby;
+import entities.livingentities.Crabby;
 import main.Game;
 
-import static utils.Constants.EnemyConstants.CRABBY;
 import static utils.Constants.EnemyConstants.CRABBY_COLOR;
 
 public class LoadSave {
@@ -31,6 +31,7 @@ public class LoadSave {
     public static final String PLAYING_BG_IMG = "Level/city.png";
     public static final String EDIT_BG_IMG = "UI/level_editor_background.png";
     public static final String EDIT_BG_map = "UI/level_designer/map.png";
+    public static final String OBJECT_BORDER = "UI/frame.png";
     public static final String BIG_CLOUDS = "Level/big_clouds.png";
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
@@ -38,6 +39,7 @@ public class LoadSave {
     public static final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
+//        System.out.println(fileName);
         BufferedImage img = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + fileName);
         try {
@@ -55,7 +57,31 @@ public class LoadSave {
         }
         return img;
     }
+    public static void saveMap(int[][] pixels) {
+        int width = pixels.length;
+        int height = pixels[0].length;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(pixels[x][y] == 0){
+                    image.setRGB(x, y, new Color(1,0,0).getRGB());
+                } else{
+                    image.setRGB(x, y, pixels[x][y]);
 
+                }
+            }
+        }
+        File outputFile = new File("image.png");
+        try{
+            ImageIO.write(image, "png", outputFile);
+            System.out.println("Image saved to " + outputFile.getAbsolutePath());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
     public static ArrayList<Crabby> GetCrabs() {
         BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         ArrayList<Crabby> list = new ArrayList<>();

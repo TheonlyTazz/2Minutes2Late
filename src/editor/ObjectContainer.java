@@ -2,18 +2,21 @@ package editor;
 
 import main.Game;
 import ui.buttons.ObjectButton;
+import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class ObjectContainer {
     private int x = (int)(Game.GAME_WIDTH - Game.TILES_DEFAULT_SIZE*9);
-    private int y = (int)(Game.TILES_DEFAULT_SIZE * 2);
+    private int y = (int)(Game.TILES_DEFAULT_SIZE * 3);
     private int width = Game.TILES_DEFAULT_SIZE * 8;
     private int height = Game.TILES_DEFAULT_SIZE * 24;
     private int scroll = 0;
+    private BufferedImage border;
     private ArrayList<Object> objects;
     private ObjectButton[] buttons;
     private final Rectangle bounds;
@@ -24,11 +27,16 @@ public class ObjectContainer {
         System.out.println(buttons.length);
         bounds = new Rectangle(x,y,width,height);
         System.out.println(bounds);
+        loadBorder();
 
     }
     public Rectangle getBounds() {
         return bounds;
     }
+    private void loadBorder(){
+        border = LoadSave.GetSpriteAtlas(LoadSave.OBJECT_BORDER);
+    }
+
     public void loadButtons(ArrayList<Object> objects) {
         buttons = new ObjectButton[objects.size()];
         int buttonX = x;
@@ -58,7 +66,11 @@ public class ObjectContainer {
                 b.draw(g);
             }
         }
-        g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
+        Color c = new Color(0, 0, 0, 75);
+        g.setColor(c);
+        g.fillRect(bounds.x-16, bounds.y-16, bounds.width+32, bounds.height+32);
+//        g.drawImage(border, bounds.x-16, bounds.y-16, bounds.width+32, bounds.height+32, null);
+//        g.drawRect(bounds.x, bounds.y, bounds.width, bounds.height);
     }
     public void update(){
         for(ObjectButton b : buttons){

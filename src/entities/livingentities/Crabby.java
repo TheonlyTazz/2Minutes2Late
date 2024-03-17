@@ -1,14 +1,14 @@
-package entities;
+package entities.livingentities;
 
 import static utils.Constants.EnemyConstants.*;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
 
 import static utils.Constants.Directions.*;
 
+import entities.Enemy;
 import main.Game;
 
 public class Crabby extends Enemy {
@@ -28,8 +28,8 @@ public class Crabby extends Enemy {
 		attackBoxOffsetX = (int) (Game.SCALE * 30);
 	}
 
-	public void update(int[][] lvlData, Player player) {
-		updateBehavior(lvlData, player);
+	public void update(int[][] lvlData, Player_old playerOld) {
+		updateBehavior(lvlData, playerOld);
 		updateAnimationTick();
 		updateAttackBox();
 
@@ -41,7 +41,7 @@ public class Crabby extends Enemy {
 
 	}
 
-	private void updateBehavior(int[][] lvlData, Player player) {
+	private void updateBehavior(int[][] lvlData, Player_old playerOld) {
 		if (firstUpdate)
 			firstUpdateCheck(lvlData);
 
@@ -53,9 +53,9 @@ public class Crabby extends Enemy {
 					newState(RUNNING);
 					break;
 				case RUNNING:
-					if (canSeePlayer(lvlData, player))
-						turnTowardsPlayer(player);
-					if (isPlayerCloseForAttack(player))
+					if (canSeePlayer(lvlData, playerOld))
+						turnTowardsPlayer(playerOld);
+					if (isPlayerCloseForAttack(playerOld))
 						newState(ATTACK);
 
 					move(lvlData);
@@ -66,7 +66,7 @@ public class Crabby extends Enemy {
 
 					// Changed the name for checkEnemyHit to checkPlayerHit
 					if (aniIndex == 3 && !attackChecked)
-						checkPlayerHit(attackBox, player);
+						checkPlayerHit(attackBox, playerOld);
 
 					break;
 				case HIT:

@@ -6,19 +6,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import entities.EnemyManager;
-import entities.Player;
+import entities.livingentities.Player_old;
+import entities.livingentities.Player;
 import levels.LevelManager;
 import main.Game;
 import ui.overlays.GameOverOverlay;
 import ui.overlays.PauseOverlay;
 import utils.Constants;
 import utils.LoadSave;
-import static utils.Constants.Environment.*;
 
 public class Playing extends State implements Statemethods {
+    private Player_old playerOld;
     private Player player;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
@@ -34,8 +34,7 @@ public class Playing extends State implements Statemethods {
     private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
 
     private BufferedImage backgroundImg, bigCloud, smallCloud;
-    private int[] smallCloudsPos;
-    private Random rnd = new Random();
+
 
     private boolean gameOver;
 
@@ -46,11 +45,7 @@ public class Playing extends State implements Statemethods {
         initClasses();
 
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
-//        bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
-//        smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
-//        smallCloudsPos = new int[8];
-//        for (int i = 0; i < smallCloudsPos.length; i++)
-//            smallCloudsPos[i] = (int) (90 * Game.SCALE) + rnd.nextInt((int) (100 * Game.SCALE));
+
     }
 
     private void initClasses() {
@@ -61,16 +56,19 @@ public class Playing extends State implements Statemethods {
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
 
-        player = new Player(startX, startY, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
-        player.setSpawn();
+        playerOld = new Player_old(startX, startY, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
+        playerOld.setSpawn();
+        player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/3 Cyborg/Cyborg", this, levelManager);
+
     }
 
     @Override
     public void update() {
         if (!paused && !gameOver) {
             levelManager.update();
+            playerOld.update();
             player.update();
-            enemyManager.update(levelManager.getCurrentLevel().getLevelData(), player);
+            enemyManager.update(levelManager.getCurrentLevel().getLevelData(), playerOld);
             checkCloseToBorder();
             checkDeathZone();
         } else
@@ -108,8 +106,8 @@ public class Playing extends State implements Statemethods {
     }
 
     private void checkDeathZone() {
-        int tileX = (int)player.getHitbox().x / Game.TILES_SIZE;
-        int tileY = (int)player.getHitbox().y / Game.TILES_SIZE;
+        int tileX = (int) playerOld.getHitbox().x / Game.TILES_SIZE;
+        int tileY = (int) playerOld.getHitbox().y / Game.TILES_SIZE;
         int value = levelManager.getTileValue(tileX, tileY);
 
         if (value == DEATH_ZONE) {
@@ -124,8 +122,8 @@ public class Playing extends State implements Statemethods {
 //        drawClouds(g);
 
         levelManager.draw(g, xLvlOffset, yLvlOffset);
+//        player.render(g, xLvlOffset, yLvlOffset);
         player.render(g, xLvlOffset, yLvlOffset);
-
         enemyManager.draw(g, xLvlOffset, yLvlOffset);
 
         if (paused) {
@@ -136,18 +134,10 @@ public class Playing extends State implements Statemethods {
             gameOverOverlay.draw(g);
     }
 
-    private void drawClouds(Graphics g) {
-        for (int i = 0; i < 3; i++)
-            g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int) (xLvlOffset * 0.3), (int) (204 * Game.SCALE), BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
-
-        for (int i = 0; i < smallCloudsPos.length; i++)
-            g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * 4 * i - (int) (xLvlOffset * 0.7), smallCloudsPos[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
-    }
-
     public void resetAll() {
         gameOver = false;
         paused = false;
-        player.resetAll();
+        playerOld.resetAll();
         enemyManager.resetAllEnemies();
     }
 
@@ -163,6 +153,7 @@ public class Playing extends State implements Statemethods {
     public void mouseClicked(MouseEvent e) {
         if (!gameOver)
             if (e.getButton() == MouseEvent.BUTTON1)
+//                player.setAttacking(true);
                 player.setAttacking(true);
     }
 
@@ -174,24 +165,40 @@ public class Playing extends State implements Statemethods {
         else
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A:
+                    playerOld.setLeft(true);
                     player.setLeft(true);
                     break;
                 case KeyEvent.VK_D:
+                    playerOld.setRight(true);
                     player.setRight(true);
                     break;
                 case KeyEvent.VK_SPACE:
+                    playerOld.setJump(true);
                     player.setJump(true);
                     break;
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
                     break;
                 case KeyEvent.VK_2:
-                    levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
+//                    levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
+                    int startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
+                    int startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
+                    player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/2 Punk/Punk", this, levelManager);
+
                     this.resetAll();
                     break;
                 case KeyEvent.VK_1:
-                    levelManager.loadLevel(LoadSave.LEVEL_ONE_DATA);
-                    this.resetAll();
+//                    levelManager.loadLevel(LoadSave.LEVEL_ONE_DATA);
+                    startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
+                    startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
+                    player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/1 Biker/Biker", this, levelManager);
+                    break;
+                case KeyEvent.VK_3:
+                    startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
+                    startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
+                    player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/3 Cyborg/Cyborg", this, levelManager);
+
+//                    this.resetAll();
             }
     }
 
@@ -200,12 +207,15 @@ public class Playing extends State implements Statemethods {
         if (!gameOver)
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_A:
+                    playerOld.setLeft(false);
                     player.setLeft(false);
                     break;
                 case KeyEvent.VK_D:
+                    playerOld.setRight(false);
                     player.setRight(false);
                     break;
                 case KeyEvent.VK_SPACE:
+                    playerOld.setJump(false);
                     player.setJump(false);
                     break;
             }
@@ -244,11 +254,11 @@ public class Playing extends State implements Statemethods {
     }
 
     public void windowFocusLost() {
-        player.resetDirBooleans();
+        playerOld.resetDirBooleans();
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player_old getPlayer() {
+        return playerOld;
     }
 
 }

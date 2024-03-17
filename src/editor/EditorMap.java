@@ -12,7 +12,7 @@ public class EditorMap {
     private int[][] map;
     private int width;
     private int height;
-    private int xOff = Game.TILES_DEFAULT_SIZE;
+    private int xOff = Game.TILES_DEFAULT_SIZE*2;
     private int yOff = Game.TILES_DEFAULT_SIZE*2;
     private Rectangle rect;
 
@@ -29,6 +29,9 @@ public class EditorMap {
     }
     public int[][] getMap() {
         return map;
+    }
+    public void clearTile(int x, int y){
+        map[x][y] = 0;
     }
     public void setTile(Color color, int x, int y) {
         int red, green, blue;
@@ -88,7 +91,7 @@ public class EditorMap {
 
     public int[] getTile(int x, int y){
         int[] intIndex = new int[2];
-        int xIndex = x / Game.TILES_DEFAULT_SIZE - 1;
+        int xIndex = x / Game.TILES_DEFAULT_SIZE - 2;
         int yIndex = y / Game.TILES_DEFAULT_SIZE - 2;
         intIndex[0] = xIndex;
         intIndex[1] = yIndex;

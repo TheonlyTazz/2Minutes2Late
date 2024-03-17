@@ -6,6 +6,10 @@ import java.awt.*;
 
 public class Constants {
 	public static class ColorMapConstants {
+		public static final String TILE = "tiles";
+		public static final String ENTITY = "entity";
+		public static final String OBJECT = "object";
+
 		public static class DeathZone {
 			public static final int DEATH_ZONE = 255;
 		}
@@ -139,23 +143,48 @@ public class Constants {
 		public static final int DEAD = 6;
 
 		public static int GetSpriteAmount(int player_action) {
-			switch (player_action) {
-				case DEAD:
-					return 8;
-				case RUNNING:
-					return 6;
-				case IDLE:
-					return 5;
-				case HIT:
-					return 4;
-				case JUMP:
-				case ATTACK:
-					return 3;
-				case FALLING:
-				default:
-					return 1;
-			}
+            return switch (player_action) {
+                case DEAD -> 8;
+                case RUNNING -> 6;
+                case IDLE -> 5;
+                case HIT -> 4;
+                case JUMP, ATTACK -> 3;
+                default -> 1;
+            };
 		}
 	}
+
+	public static class PlayerConstants2 {
+		public static final int IDLE = 0;
+		public static final int RUNNING = 1;
+		public static final int JUMP = 2;
+		public static final int DOUBLE_JUMP = 3;
+		public static final int CLIMB = 4;
+		public static final int PUNCH = 5;
+		public static final int RUNNING_PUNCH = 6;
+		public static final int ATTACK_1 = 7;
+		public static final int ATTACK_2 = 8;
+		public static final int ATTACK_3 = 9;
+		public static final int HURT = 10;
+		public static final int DEATH = 11;
+
+		public static String getFileName(int player_action) {
+            return switch (player_action) {
+                case RUNNING -> "run.png";
+                case JUMP -> "jump.png";
+                case DOUBLE_JUMP -> "doublejump.png";
+                case CLIMB -> "climb.png";
+                case PUNCH -> "punch.png";
+                case RUNNING_PUNCH -> "run_attack.png";
+                case ATTACK_1 -> "attack1.png";
+                case ATTACK_2 -> "attack2.png";
+                case ATTACK_3 -> "attack3.png";
+                case HURT -> "hurt.png";
+                case DEATH -> "death.png";
+                default -> "idle.png";
+            };
+		}
+	}
+
 
 }

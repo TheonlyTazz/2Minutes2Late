@@ -3,6 +3,7 @@ package ui.buttons;
 import ui.Button;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class PauseButton extends Button {
 
@@ -55,6 +56,11 @@ public class PauseButton extends Button {
 
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    @Override
+    public void onClick(MouseEvent e) {
+
     }
 
     public void setBounds(Rectangle bounds) {

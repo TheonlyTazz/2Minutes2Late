@@ -1,5 +1,7 @@
 package editor;
 
+import utils.LoadSave;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -17,6 +19,7 @@ public class Object {
     }
 
     public void setSprite(BufferedImage sprite) {
+
         this.sprite = sprite;
     }
 

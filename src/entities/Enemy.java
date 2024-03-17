@@ -7,23 +7,11 @@ import java.awt.geom.Rectangle2D;
 
 import static utils.Constants.Directions.*;
 
+import entities.livingentities.Player_old;
 import main.Game;
 
-public abstract class Enemy extends Entity {
-	protected int aniIndex, enemyState, enemyType;
-	protected int aniTick, aniSpeed = 25;
-	protected boolean firstUpdate = true;
-	protected boolean inAir;
-	protected float fallSpeed;
-	protected float gravity = 0.04f * Game.SCALE;
-	protected float walkSpeed = 0.35f * Game.SCALE;
-	protected int walkDir = LEFT;
-	protected int tileY;
-	protected float attackDistance = Game.TILES_SIZE;
-	protected int maxHealth;
-	protected int currentHealth;
-	protected boolean active = true;
-	protected boolean attackChecked;
+public abstract class Enemy extends LivingEntity {
+	protected int enemyState, enemyType;
 
 	public Enemy(float x, float y, int width, int height, int enemyType) {
 		super(x, y, width, height);
@@ -68,31 +56,31 @@ public abstract class Enemy extends Entity {
 		changeWalkDir();
 	}
 
-	protected void turnTowardsPlayer(Player player) {
-		if (player.hitbox.x > hitbox.x)
+	protected void turnTowardsPlayer(Player_old playerOld) {
+		if (playerOld.hitbox.x > hitbox.x)
 			walkDir = RIGHT;
 		else
 			walkDir = LEFT;
 	}
 
-	protected boolean canSeePlayer(int[][] lvlData, Player player) {
-		int playerTileY = (int) (player.getHitbox().y / Game.TILES_SIZE);
+	protected boolean canSeePlayer(int[][] lvlData, Player_old playerOld) {
+		int playerTileY = (int) (playerOld.getHitbox().y / Game.TILES_SIZE);
 		if (playerTileY == tileY)
-			if (isPlayerInRange(player)) {
-				if (IsSightClear(lvlData, hitbox, player.hitbox, tileY))
+			if (isPlayerInRange(playerOld)) {
+				if (IsSightClear(lvlData, hitbox, playerOld.hitbox, tileY))
 					return true;
 			}
 
 		return false;
 	}
 
-	protected boolean isPlayerInRange(Player player) {
-		int absValue = (int) Math.abs(player.hitbox.x - hitbox.x);
+	protected boolean isPlayerInRange(Player_old playerOld) {
+		int absValue = (int) Math.abs(playerOld.hitbox.x - hitbox.x);
 		return absValue <= attackDistance * 5;
 	}
 
-	protected boolean isPlayerCloseForAttack(Player player) {
-		int absValue = (int) Math.abs(player.hitbox.x - hitbox.x);
+	protected boolean isPlayerCloseForAttack(Player_old playerOld) {
+		int absValue = (int) Math.abs(playerOld.hitbox.x - hitbox.x);
 		return absValue <= attackDistance;
 	}
 
@@ -111,9 +99,9 @@ public abstract class Enemy extends Entity {
 	}
 
 	// Changed the name from "checkEnemyHit" to checkPlayerHit
-	protected void checkPlayerHit(Rectangle2D.Float attackBox, Player player) {
-		if (attackBox.intersects(player.hitbox))
-			player.changeHealth(-GetEnemyDmg(enemyType));
+	protected void checkPlayerHit(Rectangle2D.Float attackBox, Player_old playerOld) {
+		if (attackBox.intersects(playerOld.hitbox))
+			playerOld.changeHealth(-GetEnemyDmg(enemyType));
 		attackChecked = true;
 
 	}

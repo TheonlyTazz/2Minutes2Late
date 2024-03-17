@@ -5,6 +5,7 @@ import ui.Button;
 import utils.LoadSave;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import static utils.Constants.UI.Buttons.*;
@@ -71,6 +72,12 @@ public class MenuButton extends Button {
     public Rectangle getBounds(){
         return bounds;
     }
+
+    @Override
+    public void onClick(MouseEvent e) {
+
+    }
+
     public void applyGamestate() {
         Gamestate.state = state;
     }

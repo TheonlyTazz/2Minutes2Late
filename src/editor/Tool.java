@@ -19,6 +19,9 @@ public abstract class Tool {
         this.name = name;
 
     }
+    public String getName(){
+        return name;
+    }
 
     public void setButton(SoundButton button) {
         this.button = button;
@@ -39,7 +42,7 @@ public abstract class Tool {
 
     public void draw(Graphics g){
         button.draw(g);
-        if(object != null){
+        if(object != null && active){
             g.drawImage(object.getSprite(), x-2, y-2, null);
         }
 //        g.drawRect(button.getBounds().x, button.getBounds().y, button.getBounds().width, button.getBounds().height);

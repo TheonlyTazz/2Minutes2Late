@@ -2,16 +2,18 @@ package ui.buttons;
 
 import editor.Object;
 import main.Game;
+import utils.LoadSave;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class ObjectButton extends EditorButton{
     private Object object;
-    private BufferedImage img;
+    private BufferedImage img, border;
     private Boolean mouseOver, mousePressed;
     private Boolean isActive = false;
     private int rowIndex, colIndex;
+    private int borderOffset = 5;
     private int scroll = 0;
     private int minScroll = 0;
     private int maxScroll = 32 * Game.TILES_DEFAULT_SIZE;
@@ -21,6 +23,7 @@ public class ObjectButton extends EditorButton{
         super(x, y, width, height);
         this.object = object;
         loadObjectImg();
+        loadBorder();
 
     }
 
@@ -39,7 +42,9 @@ public class ObjectButton extends EditorButton{
 
         bounds.setRect(x, y+scroll, width, height);
     }
-
+    private void loadBorder(){
+        border = LoadSave.GetSpriteAtlas(LoadSave.OBJECT_BORDER);
+    }
     public void setScroll(int scroll){
 
         this.scroll = scroll;
@@ -50,6 +55,7 @@ public class ObjectButton extends EditorButton{
     }
 
     public void draw(Graphics g){
+        g.drawImage(border, x-borderOffset, y+scroll-borderOffset, width+borderOffset*2, height+borderOffset*2, null);
         g.drawImage(img, x, y+scroll, width, height, null);
     }
 

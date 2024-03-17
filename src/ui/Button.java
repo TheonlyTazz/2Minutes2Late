@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public abstract class Button {
     protected int x,y,width,height;
@@ -17,4 +18,6 @@ public abstract class Button {
     public Rectangle getBounds() {
         return bounds;
     }
+
+    public abstract void onClick(MouseEvent e);
 }

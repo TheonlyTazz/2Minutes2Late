@@ -4,6 +4,7 @@ import editor.EditorMap;
 import editor.ObjectManager;
 import editor.Tool;
 import editor.tools.Bucket;
+import editor.tools.Eraser;
 import editor.tools.Pencil;
 import editor.tools.Picker;
 import levels.LevelManager;
@@ -18,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 import ui.buttons.ObjectButton;
+import ui.buttons.SaveMapButton;
 import ui.buttons.SoundButton;
 import utils.LoadSave;
 
@@ -28,6 +30,7 @@ import static utils.Constants.UI.PauseButtons.SOUND_SIZE_DEFAULT;
 public class EditMode extends State implements Statemethods{
     private ObjectManager objectManager;
     private ObjectButton[] buttons;
+    private SaveMapButton saveMapButton;
     private LevelManager levelManager;
     private Level menu;
     private EditorMap editorMap;
@@ -49,11 +52,12 @@ public class EditMode extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager();
         menu = new Level(LoadSave.GetMenuData());
-        editorMap = new EditorMap(40, 25);
+        editorMap = new EditorMap(38, 24);
         importOutsideSprites();
         loadButtons();
         loadTools();
         activeTool = tools[1];
+        saveMapButton = new SaveMapButton(32 + SOUND_SIZE * 4 +48, 26, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT);
 
     }
 
@@ -61,19 +65,22 @@ public class EditMode extends State implements Statemethods{
         buttons = objectManager.getObjectContainer().getButtons();
     }
     private void loadTools(){
-        tools = new Tool[3];
+        tools = new Tool[4];
         tools[0] = new Picker("Picker");
         tools[0].setButton(new SoundButton(32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
         tools[1] = new Pencil("Pencil");
         tools[1].setButton(new SoundButton(32 + SOUND_SIZE + 16, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
         tools[2] = new Bucket("Bucket");
         tools[2].setButton(new SoundButton(32 + SOUND_SIZE*2 + 32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[3] = new Eraser("Eraser");
+        tools[3].setButton(new SoundButton(32 + SOUND_SIZE*3 + 48, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
     }
     @Override
     public void update() {
         for(Tool t : tools){
             t.update();
         }
+        saveMapButton.update();
         objectManager.update();
     }
     private void importOutsideSprites() {
@@ -132,6 +139,19 @@ public class EditMode extends State implements Statemethods{
                 activeTool.setObject(ob.getObject());
             }
         }
+        for(Tool t : tools){
+            if(t.getButton().getBounds().contains(e.getX(), e.getY())){
+                activeTool = t;
+                for(Tool t2: tools){
+                    t2.setActive(false);
+                }
+                t.setActive(true);
+                System.out.println("Active Tool:" + t.getName());
+
+
+            }
+
+        }
         if(editorMap.getBounds().contains(e.getX(), e.getY())){
 
             if(activeTool.getObject() != null){
@@ -148,6 +168,9 @@ public class EditMode extends State implements Statemethods{
 
             }
 
+
+        }
+        if(saveMapButton.getBounds().contains(e.getX(), e.getY())){
 
         }
 
@@ -174,9 +197,13 @@ public class EditMode extends State implements Statemethods{
 
     public void mouseDragged(MouseEvent e) {
         if(editorMap.getBounds().contains(e.getX(), e.getY())){
+            int[] tileIndex = new int[2];
+            tileIndex = editorMap.getTile(e.getX(), e.getY());
+            if(activeTool instanceof Eraser){
+                editorMap.clearTile(tileIndex[0], tileIndex[1]);
+            }
             if(activeTool.getObject() != null){
-                int[] tileIndex = new int[2];
-                tileIndex = editorMap.getTile(e.getX(), e.getY());
+
 
                 int objectColor = activeTool.getObject().getColor().getRGB();
                 int tileColor = editorMap.getMap()[tileIndex[0]][tileIndex[1]];
@@ -195,6 +222,7 @@ public class EditMode extends State implements Statemethods{
     @Override
     public void keyPressed(KeyEvent e) {
 //        System.out.println("Key pressed");
+
     }
 
     @Override

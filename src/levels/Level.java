@@ -1,13 +1,21 @@
 package levels;
 
+import entities.Entity;
+import utils.ResourceLoader;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
+import static utils.Constants.ColorMapConstants.*;
+
 public class Level {
 
-    public int[][] lvlData;
+    private int[][] lvlData;
     private int levelHeight;
     private int levelWidth;
     private int playerStartX, playerStartY;
-
-
+    private ArrayList<Entity> entities;
 
     public Level(int[][] lvlData){
         this.lvlData = lvlData;
@@ -19,6 +27,19 @@ public class Level {
     public int getSpriteIndex(int x, int y) {
         return lvlData[x][y];
     }
+    public int getTileInfo(String type, int x, int y) {
+        Color c = new Color(lvlData[x][y]);
+        int red = c.getRed();
+        int green = c.getGreen();
+        int blue = c.getBlue();
+        return switch (type) {
+            case TILE -> red;
+            case ENTITY -> green;
+            case OBJECT -> blue;
+            default -> 0;
+        };
+    }
+
     public int[] getPlayerStart(){
         return new int[]{playerStartX, playerStartY};
     }
@@ -27,7 +48,6 @@ public class Level {
         for(int y = 0; y < lvlData.length; y++)
             for(int x = 0; x < lvlData[0].length; x++) {
                 if (lvlData[y][x] == 240) {
-//                    System.out.println("x: " + x + ", y: " + y);
                     playerStartX = x;
                     playerStartY = y;
                 }

@@ -1,4 +1,4 @@
-package entities;
+package entities.livingentities;
 
 import static utils.Constants.PlayerConstants.*;
 import static utils.HelpMethods.*;
@@ -6,25 +6,26 @@ import static utils.HelpMethods.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.Rectangle2D.Float;
 import java.awt.image.BufferedImage;
 
+import entities.LivingEntity;
 import gamestates.Playing;
 import levels.LevelManager;
 import main.Game;
 import utils.LoadSave;
 
-public class Player extends Entity {
+public class Player_old extends LivingEntity {
 	private BufferedImage[][] animations;
-	private int aniTick, aniIndex, aniSpeed = 25;
+	private int[][] lvlData;
+	private LevelManager levelManager;
+
 	private int playerAction = IDLE;
 	private boolean moving = false, attacking = false;
 	private boolean left, up, right, down, jump;
-	private float playerSpeed = 1.0f * Game.SCALE;
-	private int[][] lvlData;
+	private float walkSpeed = 1.0f * Game.SCALE;
 	private float xDrawOffset = 21 * Game.SCALE;
 	private float yDrawOffset = 4 * Game.SCALE;
-	private LevelManager levelManager;
+
 	// Jumping / Gravity
 	private float airSpeed = 0f;
 	private float gravity = 0.04f * Game.SCALE;
@@ -59,7 +60,7 @@ public class Player extends Entity {
 	private boolean attackChecked;
 	private Playing playing;
 
-	public Player(int x, int y,int width, int height, Playing playing, LevelManager levelManager) {
+	public Player_old(int x, int y, int width, int height, Playing playing, LevelManager levelManager) {
 		super(x, y, width, height);
 		this.playing = playing;
 		this.levelManager = levelManager;
@@ -195,12 +196,12 @@ public class Player extends Entity {
 		float xSpeed = 0;
 
 		if (left) {
-			xSpeed -= playerSpeed;
+			xSpeed -= walkSpeed;
 			flipX = width;
 			flipW = -1;
 		}
 		if (right) {
-			xSpeed += playerSpeed;
+			xSpeed += walkSpeed;
 			flipX = 0;
 			flipW = 1;
 		}
@@ -272,7 +273,7 @@ public class Player extends Entity {
 	}
 
 	public void loadlvlData() {
-		this.lvlData = levelManager.getCurrentLevel().lvlData;
+		this.lvlData = levelManager.getCurrentLevel().getLevelData();
 		if (!IsEntityOnFloor(hitbox, lvlData))
 			inAir = true;
 	}
