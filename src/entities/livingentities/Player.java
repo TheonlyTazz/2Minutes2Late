@@ -28,6 +28,7 @@ public class Player extends LivingEntity {
 
     private int playerAction = IDLE;
     private boolean moving = false, attacking = false;
+    private float xSpeed = 0;
     private int attackCombo = 0, comboTimer = 0;
     private int attack = IDLE;
     private float walkSpeed = 1.0f * Game.SCALE;
@@ -127,6 +128,7 @@ public class Player extends LivingEntity {
         }
 
         if (attacking) {
+
             aniSpeed = 15;
             switch(attackCombo){
                 case 1:
@@ -135,8 +137,10 @@ public class Player extends LivingEntity {
                 case 4: playerAction = ATTACK_2;break;
                 case 5: playerAction = ATTACK_3;break;
             }
-//            playerAction = PUNCH;
-            if (startAni != PUNCH && startAni != ATTACK_1 && startAni != ATTACK_2 && startAni != ATTACK_3) {
+            if(xSpeed != 0){
+                playerAction = RUNNING_PUNCH;
+            }
+            if (startAni != PUNCH && startAni != ATTACK_1 && startAni != ATTACK_2 && startAni != ATTACK_3 && startAni != RUNNING_PUNCH) {
                 if(attackCombo < 6){
                     comboTimer = animations[playerAction].length * aniSpeed + 120;
                     attackCombo++;
@@ -172,7 +176,7 @@ public class Player extends LivingEntity {
             if ((!left && !right) || (right && left))
                 return;
 
-        float xSpeed = 0;
+        xSpeed = 0;
 
         if (left) {
             xSpeed -= walkSpeed;
@@ -197,18 +201,18 @@ public class Player extends LivingEntity {
                     airSpeed = maxFallSpeed;
                 }
 
-                updateXPos(xSpeed);
+                updateXPos();
             } else {
                 hitbox.y = GetEntityYPosUnderRoofOrAboveFloor(hitbox, airSpeed);
                 if (airSpeed > 0)
                     resetInAir();
                 else
                     airSpeed = fallSpeedAfterCollision;
-                updateXPos(xSpeed);
+                updateXPos();
             }
 
         } else
-            updateXPos(xSpeed);
+            updateXPos();
         moving = true;
     }
     private void jump() {
@@ -218,7 +222,7 @@ public class Player extends LivingEntity {
         airSpeed = jumpSpeed;
 
     }
-    private void updateXPos(float xSpeed) {
+    private void updateXPos() {
         if (CanMoveHere(hitbox.x + xSpeed, hitbox.y, hitbox.width, hitbox.height, lvlData)) {
             hitbox.x += xSpeed;}
         else
