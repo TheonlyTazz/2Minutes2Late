@@ -34,6 +34,11 @@ public class Playing extends State implements Statemethods {
     private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
     private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
 
+    private int backgroundX1 = 0, backgroundX2 = Game.GAME_WIDTH;
+    private int test = 0;
+
+
+
     private BufferedImage bigCloud, smallCloud;
     private BufferedImage[] backgroundImg;
 
@@ -120,8 +125,21 @@ public class Playing extends State implements Statemethods {
     @Override
     public void draw(Graphics g) {
         for (BufferedImage background : backgroundImg) {
-            g.drawImage(background, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+            g.drawImage(background, backgroundX1, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+            g.drawImage(background, backgroundX2, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         }
+
+        backgroundX1 = -xLvlOffset + test;
+        backgroundX2 = -xLvlOffset + Game.GAME_WIDTH + test;
+
+        System.out.println(backgroundX1 + " " + backgroundX2);
+
+        float test2 = -player.getHitbox().x + xLvlOffset;
+
+        if (backgroundX1 < test2 - leftBorder) {
+            test += Game.GAME_WIDTH;
+        }
+
 
 //        drawClouds(g);
 

@@ -52,11 +52,9 @@ public class ResourceLoader {
 
         for (int i = 0; i < background.length; i++) {
             if (listOfFiles[i].isFile()) {
-
                 String path = listOfFiles[i].getPath();
                 String newPath = path.replace("res\\", "");
 
-                System.out.println(newPath);
                 background[i] = LoadSave.GetSpriteAtlas(newPath);
             }
         }
