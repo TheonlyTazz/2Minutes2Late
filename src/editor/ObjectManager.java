@@ -54,6 +54,7 @@ public class ObjectManager {
     }
 
     public void draw(Graphics g) {
+
         objectContainer.draw(g);
     }
 

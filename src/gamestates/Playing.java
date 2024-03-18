@@ -124,21 +124,7 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void draw(Graphics g) {
-        for (BufferedImage background : backgroundImg) {
-            g.drawImage(background, backgroundX1, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-            g.drawImage(background, backgroundX2, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-        }
-
-        backgroundX1 = -xLvlOffset + test;
-        backgroundX2 = -xLvlOffset + Game.GAME_WIDTH + test;
-
-        System.out.println(backgroundX1 + " " + backgroundX2);
-
-        float test2 = -player.getHitbox().x + xLvlOffset;
-
-        if (backgroundX1 < test2 - leftBorder) {
-            test += Game.GAME_WIDTH;
-        }
+        drawBackground(g);
 
 
 //        drawClouds(g);
@@ -154,6 +140,24 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.draw(g);
         } else if (gameOver)
             gameOverOverlay.draw(g);
+    }
+
+    private void drawBackground(Graphics g) {
+        for (BufferedImage background : backgroundImg) {
+            g.drawImage(background, backgroundX1, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+            g.drawImage(background, backgroundX2, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        }
+
+        backgroundX1 = -xLvlOffset + test;
+        backgroundX2 = -xLvlOffset + Game.GAME_WIDTH + test;
+
+        System.out.println(backgroundX1 + " " + backgroundX2);
+
+        float test2 = -player.getHitbox().x + xLvlOffset;
+
+        if (backgroundX1 < test2 - leftBorder) {
+            test += Game.GAME_WIDTH;
+        }
     }
 
     public void resetAll() {

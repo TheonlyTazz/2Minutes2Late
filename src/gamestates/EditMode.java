@@ -52,7 +52,7 @@ public class EditMode extends State implements Statemethods{
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager();
         menu = new Level(LoadSave.GetMenuData());
-        editorMap = new EditorMap(38, 24);
+        editorMap = new EditorMap();
         importOutsideSprites();
         loadButtons();
         loadTools();
@@ -67,13 +67,13 @@ public class EditMode extends State implements Statemethods{
     private void loadTools(){
         tools = new Tool[4];
         tools[0] = new Picker("Picker");
-        tools[0].setButton(new SoundButton(32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[0].setButton(new SoundButton(32, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[1] = new Pencil("Pencil");
-        tools[1].setButton(new SoundButton(32 + SOUND_SIZE + 16, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[1].setButton(new SoundButton(32 + SOUND_SIZE + 16, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[2] = new Bucket("Bucket");
-        tools[2].setButton(new SoundButton(32 + SOUND_SIZE*2 + 32, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[2].setButton(new SoundButton(32 + SOUND_SIZE*2 + 32, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[3] = new Eraser("Eraser");
-        tools[3].setButton(new SoundButton(32 + SOUND_SIZE*3 + 48, 16, SOUND_SIZE_DEFAULT, SOUND_SIZE_DEFAULT));
+        tools[3].setButton(new SoundButton(32 + SOUND_SIZE*3 + 48, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
     }
     @Override
     public void update() {
@@ -93,7 +93,7 @@ public class EditMode extends State implements Statemethods{
 
             }
     }
-    public void loadBackground(Graphics g) {
+    public void drawBackground(Graphics g) {
         int[][] menuData = menu.getLevelData();
             for(int height = 0; height < Game.TILES_IN_HEIGHT; height++)
                 for(int width = 0; width < menu.getLevelData()[0].length; width++) {
@@ -101,9 +101,7 @@ public class EditMode extends State implements Statemethods{
                     if(index != 4){
                         g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
                     }
-                    if(width > 20){
-                        g.drawImage(menuSprite[index], Game.TILES_SIZE * width, Game.TILES_SIZE * height, Game.TILES_SIZE, Game.TILES_SIZE, null);
-                    }
+
                 }
 
     }
@@ -111,15 +109,21 @@ public class EditMode extends State implements Statemethods{
 
     @Override
     public void draw(Graphics g) {
-        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
-        g.drawImage(img, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-        loadBackground(g);
-        objectManager.draw(g);
+//        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
+//        g.drawImage(img, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+
+
         editorMap.draw(g);
+        objectManager.draw(g);
+        drawBackground(g);
         for(Tool tool : tools){
             tool.draw(g);
         }
+        g.setColor(Color.BLACK);
+        g.drawString("Active Tool: " + activeTool.getName(),32 + SOUND_SIZE*4 + 48, 64);
     }
+
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -151,9 +155,11 @@ public class EditMode extends State implements Statemethods{
 
             }
 
-        }
-        if(editorMap.getBounds().contains(e.getX(), e.getY())){
 
+        }
+
+        if(editorMap.inBounds(e.getX(), e.getY())){
+            System.out.println("X: " + e.getX() + " Y: " + e.getY());
             if(activeTool.getObject() != null){
                 int[] tileIndex = new int[2];
                 tileIndex = editorMap.getTile(e.getX(), e.getY());
@@ -193,10 +199,11 @@ public class EditMode extends State implements Statemethods{
         if(objectManager.getObjectContainer().getBounds().contains(e.getX(), e.getY())){
 //            System.out.println("Hovering over: objectContainer");
         }
+
     }
 
     public void mouseDragged(MouseEvent e) {
-        if(editorMap.getBounds().contains(e.getX(), e.getY())){
+        if(editorMap.inBounds(e.getX(), e.getY())){
             int[] tileIndex = new int[2];
             tileIndex = editorMap.getTile(e.getX(), e.getY());
             if(activeTool instanceof Eraser){
@@ -222,6 +229,10 @@ public class EditMode extends State implements Statemethods{
     @Override
     public void keyPressed(KeyEvent e) {
 //        System.out.println("Key pressed");
+        switch(e.getKeyCode()){
+            case KeyEvent.VK_COMMA -> editorMap.adjustZoom(1f);
+            case KeyEvent.VK_PERIOD -> editorMap.adjustZoom(-1f);
+        }
 
     }
 

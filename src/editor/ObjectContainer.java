@@ -11,11 +11,14 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class ObjectContainer {
-    private int x = (int)(Game.GAME_WIDTH - Game.TILES_DEFAULT_SIZE*9);
-    private int y = (int)(Game.TILES_DEFAULT_SIZE * 3);
-    private int width = Game.TILES_DEFAULT_SIZE * 8;
-    private int height = Game.TILES_DEFAULT_SIZE * 24;
+    private int x = (int)(Game.GAME_WIDTH - Game.TILES_DEFAULT_SIZE*3.85 *Game.SCALE);
+    private int y = 0;//(int)(Game.TILES_DEFAULT_SIZE * 3);
+    private int width = (int) (Game.TILES_DEFAULT_SIZE * 3 * Game.SCALE);
+    private int height = (int) (Game.TILES_DEFAULT_SIZE * 15 * Game.SCALE);
     private int scroll = 0;
+    private int rowAmount  = 26;
+    private int maxScroll = (int)-(Game.TILES_DEFAULT_SIZE * Game.SCALE * (rowAmount + 0.5));
+    private int minScroll = (int)(Game.TILES_DEFAULT_SIZE * Game.SCALE * 1.2);
     private BufferedImage border;
     private ArrayList<Object> objects;
     private ObjectButton[] buttons;
@@ -129,14 +132,16 @@ public class ObjectContainer {
 
     public void mouseWheelMoved(MouseWheelEvent e) {
         if(bounds.contains(e.getPoint())){
-            int notches = e.getWheelRotation();
+            int notches = e.getWheelRotation() * -1;
 
-            notches *= -1;
+            if(notches > 0){
+                System.out.println("scroll UP: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
 
-            if(notches < 0){
-                scroll += notches * Game.TILES_DEFAULT_SIZE;
-            } else if(notches > 0){
-                scroll += notches * Game.TILES_DEFAULT_SIZE;
+                if(scroll < minScroll) scroll += notches * Game.TILES_DEFAULT_SIZE;
+            } else if(notches < 0){
+                System.out.println("scroll DOWN: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
+                if(scroll > maxScroll)  scroll += notches * Game.TILES_DEFAULT_SIZE;
+
             }
         }
     }
