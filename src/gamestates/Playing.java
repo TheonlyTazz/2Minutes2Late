@@ -34,9 +34,10 @@ public class Playing extends State implements Statemethods {
     private int topBorder = (int) (0.8 * Game.GAME_HEIGHT);
     private int bottomBorder = (int) (0.2 * Game.GAME_HEIGHT);
 
-    private int backgroundX1 = 0, backgroundX2 = Game.GAME_WIDTH;
-    private int test = 0;
-
+    private int backgroundX1 = 0, backgroundX2 = Game.GAME_WIDTH, backgroundx3 = -Game.GAME_WIDTH;
+    private int[] backgroundParallax = new int[]{1, 2, 2, 3, 1};
+    private int backgroundOffset = 0;
+    private float backgroundRepeat;
 
 
     private BufferedImage bigCloud, smallCloud;
@@ -106,7 +107,7 @@ public class Playing extends State implements Statemethods {
         else if (yDiff < bottomBorder)
             yLvlOffset += yDiff - bottomBorder;
 
-        if(yLvlOffset > maxLvlOffsetY)
+        if (yLvlOffset > maxLvlOffsetY)
             yLvlOffset = maxLvlOffsetY;
         else if (yLvlOffset < 0)
             yLvlOffset = 0;
@@ -143,20 +144,24 @@ public class Playing extends State implements Statemethods {
     }
 
     private void drawBackground(Graphics g) {
-        for (BufferedImage background : backgroundImg) {
-            g.drawImage(background, backgroundX1, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
-            g.drawImage(background, backgroundX2, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+
+
+        for (int i = 0; i < backgroundImg.length; i++) {
+            g.drawImage(backgroundImg[i], backgroundX1, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+            g.drawImage(backgroundImg[i], backgroundX2, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+            g.drawImage(backgroundImg[i], backgroundx3, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+
+            backgroundX1 = (-xLvlOffset + backgroundOffset) * backgroundParallax[i];
+            backgroundX2 = (-xLvlOffset + Game.GAME_WIDTH + backgroundOffset) * backgroundParallax[i];
+            backgroundx3 = (-xLvlOffset - Game.GAME_WIDTH + backgroundOffset) * backgroundParallax[i];
         }
 
-        backgroundX1 = -xLvlOffset + test;
-        backgroundX2 = -xLvlOffset + Game.GAME_WIDTH + test;
+        backgroundRepeat = -player.getHitbox().x + xLvlOffset;
 
-        System.out.println(backgroundX1 + " " + backgroundX2);
-
-        float test2 = -player.getHitbox().x + xLvlOffset;
-
-        if (backgroundX1 < test2 - leftBorder) {
-            test += Game.GAME_WIDTH;
+        if (backgroundX1 < backgroundRepeat - leftBorder && player.getFlipX() == 0) {
+            backgroundOffset += Game.GAME_WIDTH;
+        } else if (backgroundx3 > backgroundRepeat + leftBorder && player.getFlipX() != 0) {
+            backgroundOffset -= Game.GAME_WIDTH;
         }
     }
 
