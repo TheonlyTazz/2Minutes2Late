@@ -62,15 +62,13 @@ public class LoadSave {
         int width = pixels.length;
         int height = pixels[0].length;
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < height; y++) {
-
-            for (int x = 0; x < width; x++) {
-                image.setRGB(x, y, new Color(0,0,0).getRGB());
-
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 if(pixels[x][y] == 0){
-                    image.setRGB(x, y, new Color(0,0,0).getRGB());
+                    image.setRGB(x, y, new Color(1,0,0).getRGB());
                 } else{
-                    image.setRGB(x, y, new Color(pixels[x][y]).getRGB());
+                    image.setRGB(x, y, pixels[x][y]);
+
                 }
             }
         }
