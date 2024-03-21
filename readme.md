@@ -6,7 +6,7 @@ Ein 2D JumpNRun Spielprojekt
 
 ## Mitwirkende
 
-[Malte](https://github.com/EinfachMalte), [Leeroy](https://github.com/TheonlyTazz), Kevin, [Marcel](https://github.com/marcelgustin), [Adrian](https://github.com/YetiUnCode), Janek
+[Malte](https://github.com/EinfachMalte), [Leroy](https://github.com/TheonlyTazz), Kevin, [Marcel](https://github.com/marcelgustin), [Adrian](https://github.com/YetiUnCode), [Janek](https://github.com/LgischePersn)
 
 ## Ideen
 - [x] Platform: Java
