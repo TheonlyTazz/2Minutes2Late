@@ -86,6 +86,7 @@ public class EditMode extends State implements Statemethods{
         }
         saveMapButton.update();
         objectManager.update();
+        editorMap.update();
     }
     private void importOutsideSprites() {
         BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.EDIT_BG_IMG);
@@ -236,6 +237,7 @@ public class EditMode extends State implements Statemethods{
         switch(e.getKeyCode()){
             case KeyEvent.VK_COMMA -> editorMap.adjustZoom(1f);
             case KeyEvent.VK_PERIOD -> editorMap.adjustZoom(-1f);
+            case KeyEvent.VK_P -> LoadSave.saveMap(editorMap.getMap());
         }
 
     }
