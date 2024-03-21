@@ -1,10 +1,11 @@
 package levels;
 
 import entities.Entity;
-import utils.ResourceLoader;
+import entities.livingentities.Npc;
+import utils.Constants;
+import utils.LoadSave;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static utils.Constants.ColorMapConstants.*;
@@ -15,6 +16,7 @@ public class Level {
     private int levelHeight;
     private int levelWidth;
     private int playerStartX, playerStartY;
+    private ArrayList<Npc> npcs;
     private ArrayList<Entity> entities;
 
     public Level(int[][] lvlData){
@@ -52,7 +54,21 @@ public class Level {
                     playerStartY = y;
                 }
             }
+    }
 
+    public ArrayList<int[]> getNpcStartTiles() {
+        int[][] lvlDataEntities = LoadSave.GetLevelDataEntities(LoadSave.LEVEL_ONE_DATA);
+        ArrayList<int[]> list = new ArrayList<>();
+        for (int y = 0; y < lvlDataEntities.length; y++) {
+            for (int x = 0; x < lvlDataEntities[0].length; x++) {
+                if (lvlDataEntities[y][x] == Constants.ColorMapConstants.Npc.NPC_SPAWN) {
+                    list.add(new int[]{x, y});
+                    System.out.println(x + " " + y);
+                }
+            }
+        }
+
+        return list;
     }
 
     public int[][] getLevelData() {

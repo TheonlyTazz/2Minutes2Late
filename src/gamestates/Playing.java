@@ -6,8 +6,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import entities.EnemyManager;
+import entities.livingentities.Npc;
 import entities.livingentities.Player_old;
 import entities.livingentities.Player;
 import levels.LevelManager;
@@ -21,6 +24,8 @@ import utils.ResourceLoader;
 public class Playing extends State implements Statemethods {
     private Player_old playerOld;
     private Player player;
+    private ArrayList<Npc> npcs = new ArrayList<>();
+    private Npc npc;
     private LevelManager levelManager;
     private EnemyManager enemyManager;
     private PauseOverlay pauseOverlay;
@@ -68,6 +73,16 @@ public class Playing extends State implements Statemethods {
         playerOld.setSpawn();
         player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/3 Cyborg/Cyborg", this, levelManager);
 
+        ArrayList<int[]> start = levelManager.getCurrentLevel().getNpcStartTiles();
+
+        for (int[] position : start) {
+            int x = position[0] * Game.TILES_SIZE;
+            int y = position[1] * Game.TILES_SIZE;
+            npcs.add(new Npc(x, y, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Entities/townsmen/1/npc", this, levelManager));
+            System.out.println(x + " " + y);
+        }
+
+        System.out.println();
     }
 
     @Override
@@ -77,6 +92,11 @@ public class Playing extends State implements Statemethods {
             playerOld.update();
             player.update();
             enemyManager.update(levelManager.getCurrentLevel().getLevelData(), playerOld);
+
+            for (Npc npc : npcs) {
+                npc.update();
+            }
+
             checkCloseToBorder();
             checkDeathZone();
         } else
@@ -134,6 +154,10 @@ public class Playing extends State implements Statemethods {
 //        player.render(g, xLvlOffset, yLvlOffset);
         player.render(g, xLvlOffset, yLvlOffset);
         enemyManager.draw(g, xLvlOffset, yLvlOffset);
+
+        for (Npc npc : npcs) {
+            npc.render(g, xLvlOffset, yLvlOffset);
+        }
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));

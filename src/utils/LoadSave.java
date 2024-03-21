@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 import entities.livingentities.Crabby;
+import entities.livingentities.Npc;
 import main.Game;
 
 import static utils.Constants.EnemyConstants.CRABBY_COLOR;
@@ -37,6 +38,7 @@ public class LoadSave {
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
     public static final String STATUS_BAR = "UI/health_power_bar.png";
+    public static final int NPC_COLOR = Constants.ColorMapConstants.Npc.NPC_SPAWN;
     public static final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
     public static BufferedImage GetSpriteAtlas(String fileName) {
@@ -93,7 +95,6 @@ public class LoadSave {
                     list.add(new Crabby(i * Game.TILES_SIZE, j * Game.TILES_SIZE));
             }
         return list;
-
     }
 
     public static int[][] GetMenuData() {
@@ -128,5 +129,20 @@ public class LoadSave {
             }
         return lvlData;
 
+    }
+
+    public static int[][] GetLevelDataEntities(String level) {
+        BufferedImage img = GetSpriteAtlas(level);
+
+        int[][] lvlData = new int[img.getHeight()][img.getWidth()];
+
+        for (int j = 0; j < img.getHeight(); j++)
+            for (int i = 0; i < img.getWidth(); i++) {
+                Color color = new Color(img.getRGB(i, j));
+                int value = color.getGreen();
+
+                lvlData[j][i] = value;
+            }
+        return lvlData;
     }
 }

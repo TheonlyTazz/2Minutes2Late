@@ -17,6 +17,10 @@ public class Constants {
 		public static class Player {
 			public static final int PLAYER_SPAWN = 240;
 		}
+
+		public static class Npc {
+			public static final int NPC_SPAWN = 210;
+		}
 	}
 	public static class EnemyConstants {
 		public static final int CRABBY = 0;
@@ -186,5 +190,17 @@ public class Constants {
 		}
 	}
 
+	public static class NpcConstants {
+		public static final int IDLE = 0;
+		public static final int SPECIAL = 1;
+		public static final int WALK = 2;
 
+		public static String getFileName(int player_action) {
+			return switch (player_action) {
+				case SPECIAL -> "special.png";
+				case WALK -> "walk.png";
+				default -> "idle.png";
+			};
+		}
+	}
 }
