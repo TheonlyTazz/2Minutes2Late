@@ -238,6 +238,10 @@ public class EditMode extends State implements Statemethods{
             case KeyEvent.VK_COMMA -> editorMap.adjustZoom(1f);
             case KeyEvent.VK_PERIOD -> editorMap.adjustZoom(-1f);
             case KeyEvent.VK_P -> LoadSave.saveMap(editorMap.getMap());
+            case KeyEvent.VK_UP -> editorMap.moveY(Game.TILES_SIZE);
+            case KeyEvent.VK_DOWN -> editorMap.moveY(-Game.TILES_SIZE);
+            case KeyEvent.VK_LEFT -> editorMap.moveX(-Game.TILES_SIZE);
+            case KeyEvent.VK_RIGHT -> editorMap.moveX(Game.TILES_SIZE);
         }
 
     }

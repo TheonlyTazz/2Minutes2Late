@@ -19,6 +19,8 @@ public class EditorMap {
     private float minZoom = 1f, maxZoom = 8.0f;
     private int x = 0;
     private int y = 0;
+    private int minX = -15*Game.TILES_DEFAULT_SIZE, maxX = 0 ;
+    private int minY = -9*Game.TILES_DEFAULT_SIZE, maxY = 0;
     private int xOff = (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE);
     private int yOff = (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE);
     private Rectangle rect;
@@ -29,6 +31,7 @@ public class EditorMap {
     public EditorMap() {
         map = new int[width][height];
         rect = new Rectangle(x+xOff, y+yOff, (int) (width*Game.TILES_DEFAULT_SIZE*zoom), (int) (height*Game.TILES_DEFAULT_SIZE*zoom));
+
         initClasses();
         System.out.println("rectangle: " + rect.toString());
         backgroundImg = ResourceLoader.loadBackground(LoadSave.PLAYING_BG_DIR);
@@ -109,7 +112,7 @@ public class EditorMap {
                 // objects
         }
         g.setColor(Color.WHITE);
-        g.drawRect(rect.x, rect.y, (int) (rect.width/zoom), (int) (rect.height/zoom));
+//        g.drawRect(rect.x, rect.y, (int) (rect.width/zoom), (int) (rect.height/zoom));
     }
 
     public Rectangle getBounds() {
@@ -168,5 +171,31 @@ public class EditorMap {
 
     public void setyOff(int yOff) {
         this.yOff = yOff;
+    }
+    public void moveX(int x){
+
+        if(this.xOff > maxX) {
+            System.out.println("xOff: " + xOff + "maxX: " +maxX);
+            this.xOff = maxX;
+        }
+        else if(this.xOff < minX) {
+            System.out.println("xOff: " + xOff + "minX: " +minX);
+            this.xOff = minX;
+        }
+        else this.xOff += x;
+
+    }
+    public void moveY(int y){
+
+        if(this.yOff > maxY) {
+            System.out.println("yOff: " + yOff + "maxY: " +maxY);
+            this.yOff = maxY;
+        }
+        else if(this.yOff < minY) {
+            System.out.println("yOff: " + yOff + "minY: " +minY);
+            this.yOff = minY;
+
+        }
+        else this.yOff += y;
     }
 }

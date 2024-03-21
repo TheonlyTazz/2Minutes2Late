@@ -7,6 +7,7 @@ import main.Game;
 public class Move extends Tool {
     private int oldX, oldY;
     private int x = 0; private int y = 0;
+    private int leahway = 25;
     private int moveSpeed = (int) (Game.SCALE * Game.TILES_DEFAULT_SIZE);
     public Move(String name) {
         super(name);
@@ -14,17 +15,17 @@ public class Move extends Tool {
 
     public void moveMap(int mouseX, int mouseY, EditorMap map) {
         System.out.println("Move map " + x + ", " + y);
-        if(mouseX < oldX){
+        if(mouseX > oldX-leahway){
             x += moveSpeed;
             map.setxOff(x);
-        }else if(mouseX > oldX){
+        }else if(mouseX < oldX+leahway){
             x -= moveSpeed;
             map.setxOff(x);
         }
-        if(mouseY > oldY){
+        if(mouseY < oldY-leahway){
             y += moveSpeed;
             map.setyOff(y);
-        } else if(mouseY < oldY){
+        } else if(mouseY > oldY+leahway){
             y -= moveSpeed;
             map.setyOff(y);
         }
