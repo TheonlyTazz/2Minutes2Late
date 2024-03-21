@@ -12,7 +12,7 @@ Ein 2D JumpNRun Spielprojekt
 - [x] Platform: Java
 - Pixel
 - Animationen
-- MOvement
+- Movement
 - Enemyhandling
 - Mapmaking -> png
 - 10 lvl.
