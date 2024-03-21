@@ -325,6 +325,14 @@ public class Player extends LivingEntity {
         this.jump = jump;
     }
 
+    public int getFlipW() {
+        return this.flipW;
+    }
+
+    public int getFlipX() {
+        return this.flipX;
+    }
+
     public void resetAll() {
         resetDirBooleans();
         inAir = false;
