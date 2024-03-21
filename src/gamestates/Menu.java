@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import ui.buttons.MenuButton;
 import utils.LoadSave;
+import utils.ResourceLoader;
 
 public class Menu extends State implements Statemethods {
 
@@ -15,8 +16,8 @@ public class Menu extends State implements Statemethods {
 	private BufferedImage backgroundImg, backgroundImgLogo;
 	private int menuX, menuY, menuWidth, menuHeight;
 
-	public Menu(Game game) {
-		super(game);
+	public Menu(Game game, ResourceLoader resourceLoader) {
+		super(game, resourceLoader);
 		loadButtons();
 		loadBackground();
 		backgroundImgLogo = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND_IMG);

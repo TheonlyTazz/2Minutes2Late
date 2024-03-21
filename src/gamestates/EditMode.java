@@ -3,10 +3,7 @@ package gamestates;
 import editor.EditorMap;
 import editor.ObjectManager;
 import editor.Tool;
-import editor.tools.Bucket;
-import editor.tools.Eraser;
-import editor.tools.Pencil;
-import editor.tools.Picker;
+import editor.tools.*;
 import levels.LevelManager;
 import levels.Level;
 import main.Game;
@@ -22,6 +19,7 @@ import ui.buttons.ObjectButton;
 import ui.buttons.SaveMapButton;
 import ui.buttons.SoundButton;
 import utils.LoadSave;
+import utils.ResourceLoader;
 
 import static utils.Constants.UI.PauseButtons.SOUND_SIZE;
 import static utils.Constants.UI.PauseButtons.SOUND_SIZE_DEFAULT;
@@ -32,6 +30,7 @@ public class EditMode extends State implements Statemethods{
     private ObjectButton[] buttons;
     private SaveMapButton saveMapButton;
     private LevelManager levelManager;
+    private ResourceLoader resourceLoader;
     private Level menu;
     private EditorMap editorMap;
     private Tool[] tools;
@@ -42,8 +41,8 @@ public class EditMode extends State implements Statemethods{
 
 
 
-    public EditMode(Game game) {
-        super(game);
+    public EditMode(Game game, ResourceLoader resourceLoader) {
+        super(game, resourceLoader);
         initClasses();
 
     }
@@ -51,6 +50,7 @@ public class EditMode extends State implements Statemethods{
     private void initClasses() {
         levelManager = new LevelManager(game);
         objectManager = new ObjectManager();
+
         menu = new Level(LoadSave.GetMenuData());
         editorMap = new EditorMap();
         importOutsideSprites();
@@ -65,15 +65,19 @@ public class EditMode extends State implements Statemethods{
         buttons = objectManager.getObjectContainer().getButtons();
     }
     private void loadTools(){
-        tools = new Tool[4];
+        int offset = 16;
+
+        tools = new Tool[5];
         tools[0] = new Picker("Picker");
         tools[0].setButton(new SoundButton(32, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[1] = new Pencil("Pencil");
-        tools[1].setButton(new SoundButton(32 + SOUND_SIZE + 16, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
+        tools[1].setButton(new SoundButton(32 + SOUND_SIZE + offset, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[2] = new Bucket("Bucket");
-        tools[2].setButton(new SoundButton(32 + SOUND_SIZE*2 + 32, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
+        tools[2].setButton(new SoundButton(32 + (SOUND_SIZE+offset)*2, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
         tools[3] = new Eraser("Eraser");
-        tools[3].setButton(new SoundButton(32 + SOUND_SIZE*3 + 48, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
+        tools[3].setButton(new SoundButton(32 + (SOUND_SIZE+offset)*3, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
+        tools[4] = new Move("Move Tool");
+        tools[4].setButton(new SoundButton(32 + (SOUND_SIZE+offset)*4, 16, (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2), (int) (SOUND_SIZE_DEFAULT*Game.SCALE/2)));
     }
     @Override
     public void update() {
@@ -204,14 +208,14 @@ public class EditMode extends State implements Statemethods{
 
     public void mouseDragged(MouseEvent e) {
         if(editorMap.inBounds(e.getX(), e.getY())){
-            int[] tileIndex = new int[2];
-            tileIndex = editorMap.getTile(e.getX(), e.getY());
+
+            int[] tileIndex = editorMap.getTile(e.getX(), e.getY());
             if(activeTool instanceof Eraser){
                 editorMap.clearTile(tileIndex[0], tileIndex[1]);
-            }
-            if(activeTool.getObject() != null){
-
-
+            } else if(activeTool instanceof Move){
+                System.out.println(e.getX() + " " + e.getY());
+                ((Move) activeTool).moveMap(e.getX(), e.getY(), editorMap);
+            } else if(activeTool.getObject() != null){
                 int objectColor = activeTool.getObject().getColor().getRGB();
                 int tileColor = editorMap.getMap()[tileIndex[0]][tileIndex[1]];
 

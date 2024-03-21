@@ -61,4 +61,20 @@ public class ResourceLoader {
 
         return background;
     }
+
+    public static BufferedImage[] getLevelTileSet() {
+        return LevelTileSet;
+    }
+
+    public static BufferedImage[][] getLevelData() {
+        return LevelData;
+    }
+
+    public static BufferedImage[][] getEntities() {
+        return Entities;
+    }
+
+    public static BufferedImage[][] getObjects() {
+        return Objects;
+    }
 }

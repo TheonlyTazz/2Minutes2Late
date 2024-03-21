@@ -4,13 +4,12 @@ import java.awt.event.MouseEvent;
 
 import main.Game;
 import ui.Button;
-import ui.buttons.MenuButton;
+import utils.ResourceLoader;
 
 public class State {
-
 	protected Game game;
 
-	public State(Game game) {
+	public State(Game game, ResourceLoader resourceLoader) {
 		this.game = game;
 	}
 	

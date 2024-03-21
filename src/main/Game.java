@@ -5,8 +5,10 @@ import gamestates.Gamestate;
 import gamestates.Menu;
 import gamestates.Playing;
 import gamestates.EditMode;
+import utils.ResourceLoader;
 
 public class Game implements Runnable {
+	protected ResourceLoader resourceLoader;
 
 	private GameWindow gameWindow;
 	private GamePanel gamePanel;
@@ -19,7 +21,7 @@ public class Game implements Runnable {
 	private EditMode edit;
 
 	public final static int TILES_DEFAULT_SIZE = 32;
-	public final static float SCALE = 3f;
+	public final static float SCALE = 2f;
 	public final static int TILES_IN_WIDTH = 26;
 	public final static int TILES_IN_HEIGHT = 14;
 	public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
@@ -27,6 +29,7 @@ public class Game implements Runnable {
 	public static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
 
 	public Game() {
+		resourceLoader = new ResourceLoader();
 		initClasses();
 
 		gamePanel = new GamePanel(this);
@@ -42,9 +45,9 @@ public class Game implements Runnable {
 		GAME_HEIGHT = height;
 	}
 	private void initClasses() {
-		menu = new Menu(this);
-		playing = new Playing(this);
-		edit = new EditMode(this);
+		menu = new Menu(this, resourceLoader);
+		playing = new Playing(this, resourceLoader);
+		edit = new EditMode(this, resourceLoader);
 	}
 
 	private void startGameLoop() {

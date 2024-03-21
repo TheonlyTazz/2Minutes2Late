@@ -27,9 +27,9 @@ public class ObjectContainer {
     public ObjectContainer(ArrayList<Object> objects) {
         this.objects = objects;
         loadButtons(objects);
-        System.out.println(buttons.length);
+//        System.out.println(buttons.length);
         bounds = new Rectangle(x,y,width,height);
-        System.out.println(bounds);
+//        System.out.println(bounds);
         loadBorder();
 
     }
@@ -42,20 +42,21 @@ public class ObjectContainer {
 
     public void loadButtons(ArrayList<Object> objects) {
         buttons = new ObjectButton[objects.size()];
-        int buttonX = x;
+        int buttonXOff = (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE * 0.1);
+        int buttonX = x + buttonXOff;
         int buttonY = y;
         for(Object o : objects){
             buttons[objects.indexOf(o)] = new ObjectButton(
                     buttonX,
                     buttonY,
-                    Game.TILES_DEFAULT_SIZE * 3,
-                    Game.TILES_DEFAULT_SIZE * 3,
+                    (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE),
+                    (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE),
                     o);
             if(objects.indexOf(o) % 2 == 1){
-                buttonX = x;
-                buttonY += (int) (Game.TILES_DEFAULT_SIZE * 5);
+                buttonX = x + buttonXOff;
+                buttonY += (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE * 1.5);
             } else{
-                buttonX += Game.TILES_DEFAULT_SIZE * 5;
+                buttonX += (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE *1.5);
             }
         }
 
@@ -135,11 +136,11 @@ public class ObjectContainer {
             int notches = e.getWheelRotation() * -1;
 
             if(notches > 0){
-                System.out.println("scroll UP: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
+//                System.out.println("scroll UP: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
 
                 if(scroll < minScroll) scroll += notches * Game.TILES_DEFAULT_SIZE;
             } else if(notches < 0){
-                System.out.println("scroll DOWN: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
+//                System.out.println("scroll DOWN: " + scroll + "minScroll: " + minScroll + "maxScroll: " + maxScroll);
                 if(scroll > maxScroll)  scroll += notches * Game.TILES_DEFAULT_SIZE;
 
             }

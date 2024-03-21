@@ -47,8 +47,8 @@ public class Playing extends State implements Statemethods {
 
     private final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
-    public Playing(Game game) {
-        super(game);
+    public Playing(Game game, ResourceLoader resourceLoader) {
+        super(game, resourceLoader);
         initClasses();
 
         // backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);

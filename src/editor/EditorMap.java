@@ -15,7 +15,7 @@ public class EditorMap {
     private int[][] map;
     private int width = 57;
     private int height = 36;
-    private float zoom = 1f;
+    private float zoom = 1f*Game.SCALE;
     private float minZoom = 1f, maxZoom = 8.0f;
     private int xOff = (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE);
     private int yOff = (int) (Game.TILES_DEFAULT_SIZE * Game.SCALE);
@@ -29,7 +29,7 @@ public class EditorMap {
         map = new int[width][height];
                 rect = new Rectangle(xOff, yOff, (int) (width*Game.TILES_DEFAULT_SIZE*zoom), (int) (height*Game.TILES_DEFAULT_SIZE*zoom));
         initClasses();
-        System.out.println("rectangle: " + rect.toString());
+//        System.out.println("rectangle: " + rect.toString());
         backgroundImg = ResourceLoader.loadBackground(LoadSave.PLAYING_BG_DIR);
     }
     public void initClasses(){
@@ -116,8 +116,8 @@ public class EditorMap {
         int yIndex = (int) ((y-yOff) / Game.TILES_DEFAULT_SIZE/zoom);
         intIndex[0] = xIndex;
         intIndex[1] = yIndex;
-        System.out.println("X: " + x + ", Y: " + y);
-        System.out.println("intIndex[0]: " + intIndex[0] + ", intIndex[1]: " + intIndex[1]);
+//        System.out.println("X: " + x + ", Y: " + y);
+//        System.out.println("intIndex[0]: " + intIndex[0] + ", intIndex[1]: " + intIndex[1]);
         return intIndex;
 
 
@@ -128,7 +128,7 @@ public class EditorMap {
         else if(zoom < this.minZoom-0.5f) zoom = this.minZoom;
         else this.zoom = zoom;
 
-        System.out.println("Zoom: " + zoom);
+//        System.out.println("Zoom: " + zoom);
         rect.width = (int) (width*Game.TILES_DEFAULT_SIZE*zoom);
         rect.height = (int) (height*Game.TILES_DEFAULT_SIZE*zoom);
     }
@@ -139,5 +139,11 @@ public class EditorMap {
         return this.zoom;
     }
 
+    public void setxOff(int xOff) {
+        this.xOff = xOff;
+    }
 
+    public void setyOff(int yOff) {
+        this.yOff = yOff;
+    }
 }

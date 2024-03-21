@@ -75,8 +75,8 @@ public class Player extends LivingEntity {
     }
     public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
         g.drawImage(animations[playerAction][aniIndex], (int) (hitbox.x) - xLvlOffset + flipX, (int) (hitbox.y - yDrawOffset) - yLvlOffset, width * flipW, height, null);
-        drawHitbox(g, xLvlOffset, yLvlOffset);
-		drawAttackBox(g, xLvlOffset, yLvlOffset);
+//        drawHitbox(g, xLvlOffset, yLvlOffset);
+//		drawAttackBox(g, xLvlOffset, yLvlOffset);
         showDebugInfo(g, xLvlOffset, yLvlOffset);
     }
     private void initAttackBox() {
