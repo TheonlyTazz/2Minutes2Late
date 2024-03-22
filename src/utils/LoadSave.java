@@ -38,7 +38,6 @@ public class LoadSave {
     public static final String SMALL_CLOUDS = "Level/small_clouds.png";
     public static final String ENEMY_CRABBY = "Enemies/crabby_sprite.png";
     public static final String STATUS_BAR = "UI/health_power_bar.png";
-    public static final int NPC_COLOR = Constants.ColorMapConstants.Npc.NPC_SPAWN;
     public static final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
     public static BufferedImage GetSpriteAtlas(String fileName) {

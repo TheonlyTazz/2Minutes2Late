@@ -61,8 +61,8 @@ public class Level {
         ArrayList<int[]> list = new ArrayList<>();
         for (int y = 0; y < lvlDataEntities.length; y++) {
             for (int x = 0; x < lvlDataEntities[0].length; x++) {
-                if (lvlDataEntities[y][x] == Constants.ColorMapConstants.Npc.NPC_SPAWN) {
-                    list.add(new int[]{x, y});
+                if (lvlDataEntities[y][x] >= Constants.ColorMapConstants.Npc.NPC_SPAWN_RANGE_START && lvlDataEntities[y][x] <= Constants.ColorMapConstants.Npc.NPC_SPAWN_RANGE_END) {
+                    list.add(new int[]{x, y, lvlDataEntities[y][x]});
                     System.out.println(x + " " + y);
                 }
             }

@@ -32,7 +32,7 @@ public class Npc extends LivingEntity {
     private float xSpeed = 0;
     private int attackCombo = 0, comboTimer = 0;
     private int attack = IDLE;
-    private float walkSpeed = .2f * Game.SCALE;
+    private float walkSpeed;
     private float xDrawOffset = 26 * Game.SCALE;
     private float yDrawOffset = 16 * Game.SCALE;
     private boolean left, up, right = true, down, jump;
@@ -50,11 +50,12 @@ public class Npc extends LivingEntity {
     private int flipW = 1;
 
 
-    public Npc(int x, int y, int width, int height, String npcSkin, Playing playing, LevelManager levelManager) {
+    public Npc(int x, int y, int width, int height, String npcSkin, Playing playing, LevelManager levelManager, float walkSpeed) {
         super(x, y, width, height);
         this.playing = playing;
         this.levelManager = levelManager;
         this.npcSkin = npcSkin;
+        this.walkSpeed = walkSpeed * Game.SCALE;
 
         setSpawn();
         loadSprites();
@@ -210,7 +211,7 @@ public class Npc extends LivingEntity {
                     int value = field.getInt(null);
                     String file = Constants.NpcConstants.getFileName(value);
 
-                    BufferedImage[] temp = ResourceLoader.loadSprite(npcSkin + "_" + file, textureWidth);
+                    BufferedImage[] temp = ResourceLoader.loadSprite(npcSkin + file, textureWidth);
                     animations[value] = temp;
 
                 }

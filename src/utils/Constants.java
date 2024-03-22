@@ -19,7 +19,8 @@ public class Constants {
 		}
 
 		public static class Npc {
-			public static final int NPC_SPAWN = 210;
+			public static final int NPC_SPAWN_RANGE_START = 201;
+			public static final int NPC_SPAWN_RANGE_END = 212;
 		}
 	}
 	public static class EnemyConstants {
@@ -197,9 +198,9 @@ public class Constants {
 
 		public static String getFileName(int player_action) {
 			return switch (player_action) {
-				case SPECIAL -> "special.png";
-				case WALK -> "walk.png";
-				default -> "idle.png";
+				case SPECIAL -> "Special.png";
+				case WALK -> "Walk.png";
+				default -> "Idle.png";
 			};
 		}
 	}

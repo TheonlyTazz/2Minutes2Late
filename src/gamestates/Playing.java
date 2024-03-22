@@ -8,6 +8,7 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import entities.EnemyManager;
 import entities.livingentities.Npc;
@@ -48,10 +49,10 @@ public class Playing extends State implements Statemethods {
     private BufferedImage bigCloud, smallCloud;
     private BufferedImage[] backgroundImg;
 
+    private final Random RANDOM_WALK_SPEED = new Random();
+
 
     private boolean gameOver;
-
-    private final int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
 
     public Playing(Game game, ResourceLoader resourceLoader) {
         super(game, resourceLoader);
@@ -78,7 +79,9 @@ public class Playing extends State implements Statemethods {
         for (int[] position : start) {
             int x = position[0] * Game.TILES_SIZE;
             int y = position[1] * Game.TILES_SIZE;
-            npcs.add(new Npc(x, y, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Entities/townsmen/1/npc", this, levelManager));
+            String folder = String.valueOf(position[2] - 200);
+            System.out.println(folder);
+            npcs.add(new Npc(x, y, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Entities/townsmen/" + folder +"/", this, levelManager, RANDOM_WALK_SPEED.nextFloat()));
             System.out.println(x + " " + y);
         }
 
@@ -138,6 +141,7 @@ public class Playing extends State implements Statemethods {
         int tileY = (int) playerOld.getHitbox().y / Game.TILES_SIZE;
         int value = levelManager.getTileValue(tileX, tileY);
 
+        int DEATH_ZONE = Constants.ColorMapConstants.DeathZone.DEATH_ZONE;
         if (value == DEATH_ZONE) {
             setGameOver(true);
         }
