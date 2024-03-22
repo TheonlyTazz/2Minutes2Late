@@ -14,6 +14,10 @@ public class Constants {
 			public static final int DEATH_ZONE = 255;
 		}
 
+		public static class WinZone {
+			public static final int WIN_ZONE = 250;
+		}
+
 		public static class Player {
 			public static final int PLAYER_SPAWN = 240;
 		}

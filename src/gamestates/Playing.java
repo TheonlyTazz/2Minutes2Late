@@ -18,6 +18,7 @@ import levels.LevelManager;
 import main.Game;
 import ui.overlays.GameOverOverlay;
 import ui.overlays.PauseOverlay;
+import ui.overlays.WonOverlay;
 import utils.Constants;
 import utils.LoadSave;
 import utils.ResourceLoader;
@@ -31,6 +32,7 @@ public class Playing extends State implements Statemethods {
     private EnemyManager enemyManager;
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
+    private WonOverlay wonOverlay;
     private boolean paused = false;
 
     private int xLvlOffset;
@@ -53,9 +55,11 @@ public class Playing extends State implements Statemethods {
 
 
     private boolean gameOver;
+    private boolean won = false;
 
     public Playing(Game game, ResourceLoader resourceLoader) {
         super(game, resourceLoader);
+        levelManager = new LevelManager(game);
         initClasses();
 
         // backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BG_IMG);
@@ -63,25 +67,27 @@ public class Playing extends State implements Statemethods {
     }
 
     private void initClasses() {
-        levelManager = new LevelManager(game);
+        levelManager.loadLevel(LoadSave.LEVEL_DATA + levelManager.getPlayedLevel() + ".png");
         int startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
         int startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
         enemyManager = new EnemyManager(this);
         pauseOverlay = new PauseOverlay(this);
         gameOverOverlay = new GameOverOverlay(this);
+        wonOverlay = new WonOverlay(this);
 
         playerOld = new Player_old(startX, startY, (int) (64 * Game.SCALE), (int) (40 * Game.SCALE), this, levelManager);
         playerOld.setSpawn();
+
         player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/3 Cyborg/Cyborg", this, levelManager);
 
-        ArrayList<int[]> start = levelManager.getCurrentLevel().getNpcStartTiles();
+        ArrayList<int[]> start = levelManager.getCurrentLevel().getNpcStartTiles(LoadSave.LEVEL_DATA + levelManager.getPlayedLevel() + ".png");
 
         for (int[] position : start) {
             int x = position[0] * Game.TILES_SIZE;
             int y = position[1] * Game.TILES_SIZE;
             String folder = String.valueOf(position[2] - 200);
             System.out.println(folder);
-            npcs.add(new Npc(x, y, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Entities/townsmen/" + folder +"/", this, levelManager, RANDOM_WALK_SPEED.nextFloat()));
+            npcs.add(new Npc(x, y, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Entities/townsmen/" + folder + "/", this, levelManager, RANDOM_WALK_SPEED.nextFloat()));
             System.out.println(x + " " + y);
         }
 
@@ -90,7 +96,7 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void update() {
-        if (!paused && !gameOver) {
+        if (!paused && !gameOver && !won) {
             levelManager.update();
             playerOld.update();
             player.update();
@@ -102,6 +108,12 @@ public class Playing extends State implements Statemethods {
 
             checkCloseToBorder();
             checkDeathZone();
+
+            if (!won) {
+                checkWinZone();
+            }
+        } else if (!gameOver && won) {
+            wonOverlay.update();
         } else
             pauseOverlay.update();
 
@@ -147,6 +159,18 @@ public class Playing extends State implements Statemethods {
         }
     }
 
+    private void checkWinZone() {
+        int tileX = (int) playerOld.getHitbox().x / Game.TILES_SIZE;
+        int tileY = (int) playerOld.getHitbox().y / Game.TILES_SIZE;
+        int value = levelManager.getTileValue(tileX, tileY);
+
+        int winZone = Constants.ColorMapConstants.WinZone.WIN_ZONE;
+
+        if (value == winZone) {
+            won = true;
+        }
+    }
+
     @Override
     public void draw(Graphics g) {
         drawBackground(g);
@@ -155,20 +179,24 @@ public class Playing extends State implements Statemethods {
 //        drawClouds(g);
 
         levelManager.draw(g, xLvlOffset, yLvlOffset);
-//        player.render(g, xLvlOffset, yLvlOffset);
         player.render(g, xLvlOffset, yLvlOffset);
         enemyManager.draw(g, xLvlOffset, yLvlOffset);
-
-        for (Npc npc : npcs) {
-            npc.render(g, xLvlOffset, yLvlOffset);
-        }
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT);
             pauseOverlay.draw(g);
-        } else if (gameOver)
+        } else if (gameOver) {
             gameOverOverlay.draw(g);
+        } else if (won) {
+            wonOverlay.draw(g);
+        }
+
+        if (!won) {
+            for (Npc npc : npcs) {
+                npc.render(g, xLvlOffset, yLvlOffset);
+            }
+        }
     }
 
     private void drawBackground(Graphics g) {
@@ -198,6 +226,9 @@ public class Playing extends State implements Statemethods {
         paused = false;
         player.resetAll();
         enemyManager.resetAllEnemies();
+        for (Npc npc : npcs) {
+            npc.resetAll();
+        }
     }
 
     public void setGameOver(boolean gameOver) {
@@ -239,7 +270,7 @@ public class Playing extends State implements Statemethods {
                     paused = !paused;
                     break;
                 case KeyEvent.VK_2:
-//                    levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
+                    levelManager.loadLevel(LoadSave.LEVEL_TWO_DATA);
                     int startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
                     int startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
                     player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/2 Punk/Punk", this, levelManager);
@@ -247,7 +278,7 @@ public class Playing extends State implements Statemethods {
                     this.resetAll();
                     break;
                 case KeyEvent.VK_1:
-//                    levelManager.loadLevel(LoadSave.LEVEL_ONE_DATA);
+                    levelManager.loadLevel(LoadSave.LEVEL_ONE_DATA);
                     startX = levelManager.getCurrentLevel().getPlayerStart()[0] * Game.TILES_SIZE;
                     startY = levelManager.getCurrentLevel().getPlayerStart()[1] * Game.TILES_SIZE;
                     player = new Player(startX, startY, (int) (48 * Game.SCALE), (int) (48 * Game.SCALE), "Player/1 Biker/Biker", this, levelManager);
@@ -282,34 +313,57 @@ public class Playing extends State implements Statemethods {
     }
 
     public void mouseDragged(MouseEvent e) {
-        if (!gameOver)
+        if (!gameOver) {
             if (paused)
                 pauseOverlay.mouseDragged(e);
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (!gameOver)
+        if (!gameOver) {
             if (paused)
                 pauseOverlay.mousePressed(e);
+
+            if (won)
+                wonOverlay.mousePressed(e);
+        }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (!gameOver)
+        if (!gameOver) {
             if (paused)
                 pauseOverlay.mouseReleased(e);
+
+            if (won)
+                wonOverlay.mouseReleased(e);
+        }
+
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        if (!gameOver)
+        if (!gameOver) {
             if (paused)
                 pauseOverlay.mouseMoved(e);
+            else if (won) {
+                pauseOverlay.mouseMoved(e);
+            }
+        }
     }
 
     public void unpauseGame() {
         paused = false;
+    }
+
+    public void startNexLevel() {
+        System.out.println("pressed");
+        levelManager.setPlayedLevel(levelManager.getPlayedLevel() + 1);
+        npcs = new ArrayList<>();
+        resetAll();
+        initClasses();
+        won = false;
     }
 
     public void windowFocusLost() {

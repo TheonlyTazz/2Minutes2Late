@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 import static utils.Constants.PlayerConstants.IDLE;
 import static utils.Constants.NpcConstants.*;
@@ -62,6 +63,8 @@ public class Npc extends LivingEntity {
         initHitbox(x, y, (int) (20 * Game.SCALE), (int) (30 * Game.SCALE));
         loadlvlData();
         this.setDebug(false);
+
+        System.out.println(animations[playerAction][aniIndex]);
     }
     public void update() {
         updatePos();
@@ -74,7 +77,7 @@ public class Npc extends LivingEntity {
     public void render(Graphics g, int xLvlOffset, int yLvlOffset) {
         g.drawImage(animations[playerAction][aniIndex], (int) (hitbox.x) - xLvlOffset + flipX, (int) (hitbox.y - yDrawOffset) - yLvlOffset, width * flipW, height, null);
         drawHitbox(g, xLvlOffset, yLvlOffset);
-//		drawAttackBox(g, xLvlOffset, yLvlOffset);
+
         showDebugInfo(g, xLvlOffset, yLvlOffset);
     }
 
@@ -98,7 +101,7 @@ public class Npc extends LivingEntity {
         if (moving)
             playerAction = Constants.NpcConstants.WALK;
         else
-            playerAction = IDLE;
+            playerAction = NpcConstants.IDLE;
 
         if (startAni != playerAction)
             resetAniTick();

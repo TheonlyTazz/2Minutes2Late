@@ -56,8 +56,8 @@ public class Level {
             }
     }
 
-    public ArrayList<int[]> getNpcStartTiles() {
-        int[][] lvlDataEntities = LoadSave.GetLevelDataEntities(LoadSave.LEVEL_ONE_DATA);
+    public ArrayList<int[]> getNpcStartTiles(String lvlData) {
+        int[][] lvlDataEntities = LoadSave.GetLevelDataEntities(lvlData);
         ArrayList<int[]> list = new ArrayList<>();
         for (int y = 0; y < lvlDataEntities.length; y++) {
             for (int x = 0; x < lvlDataEntities[0].length; x++) {

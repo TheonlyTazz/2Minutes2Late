@@ -13,11 +13,12 @@ public class LevelManager {
     private int lvlTilesWidth, lvlTilesHeight;
     private int maxXTilesOffset, maxYTilesOffset;
     private int maxLvlOffsetX, maxLvlOffsetY;
+    private int playedLevel = 1;
 
     public LevelManager(Game game){
         this.game = game;
         importOutsideSprites();
-        loadLevel(LoadSave.LEVEL_ONE_DATA);
+        loadLevel(LoadSave.LEVEL_DATA + playedLevel + ".png");
     }
 
 
@@ -54,6 +55,14 @@ public class LevelManager {
     public int getTileValue(int x, int y){
         if(level == null) return 0;
         return this.getCurrentLevel().getLevelData()[y][x];
+    }
+
+    public int getPlayedLevel() {
+        return playedLevel;
+    }
+
+    public void setPlayedLevel(int playedLevel) {
+        this.playedLevel = playedLevel;
     }
 
     private void importOutsideSprites() {
